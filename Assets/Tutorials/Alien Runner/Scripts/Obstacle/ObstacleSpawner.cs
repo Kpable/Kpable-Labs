@@ -2,70 +2,75 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ObstacleSpawner : MonoBehaviour {
-
-    [SerializeField]
-    private GameObject[] obstacles;
-
-    private List<GameObject> obstaclesForSpawning = new List<GameObject>();
-
-    void Awake()
+namespace Kpable.Tutorials.AlienRunner
+{
+    public class ObstacleSpawner : MonoBehaviour
     {
-        InitObstacles();
-    }
 
-	void Start () {
-        StartCoroutine(SpawnRandomObsticle());
-	}
+        [SerializeField]
+        private GameObject[] obstacles;
 
-    void InitObstacles()
-    {
-        int index = 0;
-        for (int i = 0; i < obstacles.Length * 3; i++)
+        private List<GameObject> obstaclesForSpawning = new List<GameObject>();
+
+        void Awake()
         {
-            GameObject obj = Instantiate(obstacles[index], new Vector3(transform.position.x, transform.position.y, -2), Quaternion.identity) as GameObject;
-            obstaclesForSpawning.Add(obj);
-            obstaclesForSpawning[i].SetActive(false);
-            index++;
-            if (index == obstacles.Length)
+            InitObstacles();
+        }
+
+        void Start()
+        {
+            StartCoroutine(SpawnRandomObsticle());
+        }
+
+        void InitObstacles()
+        {
+            int index = 0;
+            for (int i = 0; i < obstacles.Length * 3; i++)
             {
-                index = 0;
+                GameObject obj = Instantiate(obstacles[index], new Vector3(transform.position.x, transform.position.y, -2), Quaternion.identity) as GameObject;
+                obstaclesForSpawning.Add(obj);
+                obstaclesForSpawning[i].SetActive(false);
+                index++;
+                if (index == obstacles.Length)
+                {
+                    index = 0;
+                }
+            }
+
+        }
+
+        void Shuffle()
+        {
+            for (int i = 0; i < obstaclesForSpawning.Count; i++)
+            {
+                GameObject temp = obstaclesForSpawning[i];
+                int random = Random.Range(i, obstaclesForSpawning.Count);
+                obstaclesForSpawning[i] = obstaclesForSpawning[random];
+                obstaclesForSpawning[random] = temp;
             }
         }
 
-    }
-
-    void Shuffle()
-    {
-        for (int i = 0; i < obstaclesForSpawning.Count; i++)
+        IEnumerator SpawnRandomObsticle()
         {
-            GameObject temp = obstaclesForSpawning[i];
-            int random = Random.Range(i, obstaclesForSpawning.Count);
-            obstaclesForSpawning[i] = obstaclesForSpawning[random];
-            obstaclesForSpawning[random] = temp;
-        }
-    }
+            yield return new WaitForSeconds(Random.Range(1.5f, 4.5f));
 
-    IEnumerator SpawnRandomObsticle()
-    {
-        yield return new WaitForSeconds(Random.Range(1.5f, 4.5f));
-
-        int index = Random.Range(0, obstaclesForSpawning.Count);
-        while (true)
-        {
-            if (!obstaclesForSpawning[index].activeInHierarchy)
+            int index = Random.Range(0, obstaclesForSpawning.Count);
+            while (true)
             {
-                obstaclesForSpawning[index].SetActive(true);
-                obstaclesForSpawning[index].transform.position = new Vector3(transform.position.x, transform.position.y, -2);
+                if (!obstaclesForSpawning[index].activeInHierarchy)
+                {
+                    obstaclesForSpawning[index].SetActive(true);
+                    obstaclesForSpawning[index].transform.position = new Vector3(transform.position.x, transform.position.y, -2);
 
-                break;
+                    break;
+                }
+                else
+                {
+                    index = Random.Range(0, obstaclesForSpawning.Count);
+                }
             }
-            else
-            {
-                index = Random.Range(0, obstaclesForSpawning.Count);
-            }
+
+            StartCoroutine(SpawnRandomObsticle());
         }
-
-        StartCoroutine(SpawnRandomObsticle());
     }
 }
