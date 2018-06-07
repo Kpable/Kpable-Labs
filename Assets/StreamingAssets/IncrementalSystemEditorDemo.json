@@ -1,0 +1,68 @@
+{
+    "investments": [
+        {
+            "name": "Gas Royalties",
+            "description": "Royalties from gas",
+            "baseCost": 7.0,
+            "basePayout": 10.0,
+            "baseDuration": 1.0,
+            "baseGrowthModifier": 1.0800000429153443
+        },
+        {
+            "name": "Oil Royalties",
+            "description": "Royalties from oil",
+            "baseCost": 70.0,
+            "basePayout": 15.0,
+            "baseDuration": 5.0,
+            "baseGrowthModifier": 1.0800000429153443
+        },
+        {
+            "name": "Gas Well",
+            "description": "Well of gas",
+            "baseCost": 450.0,
+            "basePayout": 130.0,
+            "baseDuration": 10.0,
+            "baseGrowthModifier": 1.1100000143051148
+        },
+        {
+            "name": "Oil Well",
+            "description": "Well of oil",
+            "baseCost": 21000.0,
+            "basePayout": 1100.0,
+            "baseDuration": 20.0,
+            "baseGrowthModifier": 1.090000033378601
+        },
+        {
+            "name": "Oil Sands",
+            "description": "Sand of oil",
+            "baseCost": 160000.0,
+            "basePayout": 1000.0,
+            "baseDuration": 50.0,
+            "baseGrowthModifier": 1.100000023841858
+        },
+        {
+            "name": "Shale Play",
+            "description": "Playful shale",
+            "baseCost": 2200000.0,
+            "basePayout": 90000.0,
+            "baseDuration": 150.0,
+            "baseGrowthModifier": 1.0800000429153443
+        },
+        {
+            "name": "Omani Field",
+            "description": "Field o' omani",
+            "baseCost": 19400000.0,
+            "basePayout": 850000.0,
+            "baseDuration": 600.0,
+            "baseGrowthModifier": 1.0800000429153443
+        },
+        {
+            "name": "Saudi Field",
+            "description": "Saudelicious",
+            "baseCost": 620000000.0,
+            "basePayout": 7000000.0,
+            "baseDuration": 2400.0,
+            "baseGrowthModifier": 1.0700000524520875
+        }
+    ]
+}
