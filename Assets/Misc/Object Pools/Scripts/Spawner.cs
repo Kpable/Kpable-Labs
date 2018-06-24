@@ -14,6 +14,6 @@ public class Spawner : MonoBehaviour {
 	void FixedUpdate () {
 
         objectPooler.SpawnFromPool("box", transform.position, Quaternion.identity);
-
+        objectPooler.SpawnFromPool("ball", transform.position, Quaternion.identity);
     }
 }
