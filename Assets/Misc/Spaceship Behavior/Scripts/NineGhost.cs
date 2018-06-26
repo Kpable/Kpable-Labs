@@ -69,21 +69,21 @@ public class NineGhost : MonoBehaviour {
         Vector3[] hood = new Vector3[8];
 
         // Top Left
-        hood[0] = new Vector3(position.x + size.xMin, position.y + size.yMax, 0);
+        hood[0] = new Vector3(position.x - size.width, position.y + size.height, 0);
         // Top
-        hood[1] = new Vector3(position.x            , position.y + size.yMax, 0);
+        hood[1] = new Vector3(position.x             , position.y + size.height, 0);
         // Top Right
-        hood[2] = new Vector3(position.x + size.xMax, position.y + size.yMax, 0);
+        hood[2] = new Vector3(position.x + size.width, position.y + size.height, 0);
         // Left
-        hood[3] = new Vector3(position.x + size.xMin, position.y            , 0);
+        hood[3] = new Vector3(position.x - size.width, position.y            , 0);
         // Right
-        hood[4] = new Vector3(position.x + size.xMax, position.y            , 0);
+        hood[4] = new Vector3(position.x + size.width, position.y            , 0);
         // Bottom Left
-        hood[5] = new Vector3(position.x + size.xMin, position.y + size.yMin, 0);
+        hood[5] = new Vector3(position.x - size.width, position.y - size.height, 0);
         // Bottom 
-        hood[6] = new Vector3(position.x            , position.y + size.yMin, 0);
+        hood[6] = new Vector3(position.x             , position.y - size.height, 0);
         // Bottom Right
-        hood[7] = new Vector3(position.x + size.xMax, position.y + size.yMin, 0);
+        hood[7] = new Vector3(position.x + size.width, position.y - size.height, 0);
 
         return hood;
     }
