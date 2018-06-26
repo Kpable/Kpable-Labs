@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody2D))]
 public class SpaceshipBehavior : MonoBehaviour {
 
-    public float acceleration = 15f;
-    public float maxSpeed = 250f;
+    public float thrust = 250f;
     public float rotationSpeed = 180f;
     public float drag = 0.8f;
+    public float gravityScale = 0f;
 
     private float hAxis, vAxis;
 
@@ -16,8 +17,8 @@ public class SpaceshipBehavior : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         body = GetComponent<Rigidbody2D>();
-        if(body)
-            body.drag = drag;
+        body.drag = drag;
+        body.gravityScale = gravityScale;
 	}
 	
 	// Update is called once per frame
@@ -47,19 +48,10 @@ public class SpaceshipBehavior : MonoBehaviour {
 
     private void Thrust()
     {
-        Vector3 velocity = new Vector3(0, vAxis * acceleration * Time.deltaTime, 0);
+        Vector3 force = new Vector3(0, vAxis * thrust * Time.deltaTime, 0);
 
-        if (body)
-        {
-            body.AddForce(transform.rotation * velocity);
+        body.AddForce(transform.rotation * force);
 
-        }
-        else
-        {
-            Vector3 pos = transform.position;
-            pos += transform.rotation * velocity;
-            transform.position = pos;
-        }
     }
 
 }
