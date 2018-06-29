@@ -34,9 +34,11 @@ public class Weapon : MonoBehaviour {
     public GameObject collar;
     public float lastShot;
 
+    ObjectPooler objectPooler;
     // Use this for initialization
     void Start () {
         def = Main.GetWeaponDefinition(_type);
+        objectPooler = ObjectPooler.Instance;
     }
 	
 	// Update is called once per frame
@@ -71,7 +73,8 @@ public class Weapon : MonoBehaviour {
 
     public Projectile MakeProjectile()
     {
-        GameObject go = Instantiate(def.projectilePrefab);
+        //GameObject go = Instantiate(def.projectilePrefab);
+        GameObject go = objectPooler.SpawnFromPool("projectile");
 
         go.transform.position = collar.transform.position;
         //go.transform.parent = PROJECTILE_ANCHOR;

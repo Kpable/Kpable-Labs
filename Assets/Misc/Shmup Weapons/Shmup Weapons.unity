@@ -113,6 +113,85 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &75369538
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 114511728184338928, guid: f2976a71616b45645828ca14101c55e6,
+        type: 2}
+      propertyPath: pools.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4152335478464036, guid: f2976a71616b45645828ca14101c55e6, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4152335478464036, guid: f2976a71616b45645828ca14101c55e6, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4152335478464036, guid: f2976a71616b45645828ca14101c55e6, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4152335478464036, guid: f2976a71616b45645828ca14101c55e6, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4152335478464036, guid: f2976a71616b45645828ca14101c55e6, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4152335478464036, guid: f2976a71616b45645828ca14101c55e6, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4152335478464036, guid: f2976a71616b45645828ca14101c55e6, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4152335478464036, guid: f2976a71616b45645828ca14101c55e6, type: 2}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114511728184338928, guid: f2976a71616b45645828ca14101c55e6,
+        type: 2}
+      propertyPath: pools.Array.data[1].tag
+      value: ball
+      objectReference: {fileID: 0}
+    - target: {fileID: 114511728184338928, guid: f2976a71616b45645828ca14101c55e6,
+        type: 2}
+      propertyPath: pools.Array.data[1].prefab
+      value: 
+      objectReference: {fileID: 1569028578344748, guid: 9a1d921c42078904dae7216cbcc444e6,
+        type: 2}
+    - target: {fileID: 114511728184338928, guid: f2976a71616b45645828ca14101c55e6,
+        type: 2}
+      propertyPath: pools.Array.data[1].size
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 114511728184338928, guid: f2976a71616b45645828ca14101c55e6,
+        type: 2}
+      propertyPath: pools.Array.data[0].tag
+      value: projectile
+      objectReference: {fileID: 0}
+    - target: {fileID: 114511728184338928, guid: f2976a71616b45645828ca14101c55e6,
+        type: 2}
+      propertyPath: pools.Array.data[0].prefab
+      value: 
+      objectReference: {fileID: 1080622910747694, guid: c3fc1029a59147d4384c6e14736aecc2,
+        type: 2}
+    - target: {fileID: 114511728184338928, guid: f2976a71616b45645828ca14101c55e6,
+        type: 2}
+      propertyPath: pools.Array.data[0].size
+      value: 20
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: f2976a71616b45645828ca14101c55e6, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &194491969
 GameObject:
   m_ObjectHideFlags: 0

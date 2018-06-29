@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour {
+public class Projectile : MonoBehaviour, IPooledObject {
 
     [SerializeField]
     private WeaponType _type;
@@ -30,5 +30,10 @@ public class Projectile : MonoBehaviour {
         WeaponDefinition def = Main.GetWeaponDefinition(_type);
         GetComponent<Renderer>().material.color = def.projectileColor;
 
+    }
+
+    public void OnObjectSpawned()
+    {
+        // ;
     }
 }
