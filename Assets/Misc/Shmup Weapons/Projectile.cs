@@ -36,4 +36,16 @@ public class Projectile : MonoBehaviour, IPooledObject {
     {
         // ;
     }
+
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        Debug.Log("Hit something:" + collider.name);
+
+        Health health = collider.gameObject.GetComponent<Health>();
+        if (health != null)
+            health.Damage(damage);
+
+        CancelInvoke("Die");
+        Die();
+    }
 }
