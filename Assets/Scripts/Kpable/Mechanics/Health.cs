@@ -7,8 +7,13 @@ namespace Kpable.Mechanics
     public class Health : MonoBehaviour
     {
 
-        public int currentHealth;
-        public int maxHealth;
+        [SerializeField]
+        private int currentHealth;
+        [SerializeField]
+        private int maxHealth;
+
+        public int CurrentHealth { get { return currentHealth; } set { currentHealth = Mathf.Clamp(value, 0, maxHealth); } }
+        public int MaxHealth { get { return maxHealth; } set { maxHealth = Mathf.Clamp(value, 0, value); } }
 
         public delegate void ValueChange();
         public ValueChange OnValueChanged;
@@ -31,14 +36,22 @@ namespace Kpable.Mechanics
 
         public void Damage(int amount)
         {
-            currentHealth -= amount;
-            currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-
-            if( currentHealth == 0)
+            if (currentHealth > 0)
             {
-                if (OnHealthDroppedToZero != null)
-                    OnHealthDroppedToZero();
+                currentHealth -= amount;
+                currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+
+                if (currentHealth == 0)
+                {
+                    if (OnHealthDroppedToZero != null)
+                        OnHealthDroppedToZero();
+                }
             }
+        }
+
+        public void Start()
+        {
+            currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         }
     }
 }
