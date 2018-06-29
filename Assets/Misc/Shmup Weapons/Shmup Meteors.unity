@@ -123,7 +123,7 @@ Prefab:
     - target: {fileID: 114511728184338928, guid: f2976a71616b45645828ca14101c55e6,
         type: 2}
       propertyPath: pools.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4152335478464036, guid: f2976a71616b45645828ca14101c55e6, type: 2}
       propertyPath: m_LocalPosition.x
@@ -160,18 +160,18 @@ Prefab:
     - target: {fileID: 114511728184338928, guid: f2976a71616b45645828ca14101c55e6,
         type: 2}
       propertyPath: pools.Array.data[1].tag
-      value: ball
+      value: meteor
       objectReference: {fileID: 0}
     - target: {fileID: 114511728184338928, guid: f2976a71616b45645828ca14101c55e6,
         type: 2}
       propertyPath: pools.Array.data[1].prefab
       value: 
-      objectReference: {fileID: 1569028578344748, guid: 9a1d921c42078904dae7216cbcc444e6,
+      objectReference: {fileID: 1774911888059988, guid: 37288a3b8666f8748954edea6a4cd6c3,
         type: 2}
     - target: {fileID: 114511728184338928, guid: f2976a71616b45645828ca14101c55e6,
         type: 2}
       propertyPath: pools.Array.data[1].size
-      value: 200
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 114511728184338928, guid: f2976a71616b45645828ca14101c55e6,
         type: 2}
@@ -539,65 +539,26 @@ Prefab:
       propertyPath: m_RootOrder
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 114697236308460502, guid: 37288a3b8666f8748954edea6a4cd6c3,
+        type: 2}
+      propertyPath: worldBounds.x
+      value: -9
+      objectReference: {fileID: 0}
+    - target: {fileID: 114697236308460502, guid: 37288a3b8666f8748954edea6a4cd6c3,
+        type: 2}
+      propertyPath: worldBounds.y
+      value: -5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114697236308460502, guid: 37288a3b8666f8748954edea6a4cd6c3,
+        type: 2}
+      propertyPath: worldBounds.width
+      value: 18
+      objectReference: {fileID: 0}
+    - target: {fileID: 114697236308460502, guid: 37288a3b8666f8748954edea6a4cd6c3,
+        type: 2}
+      propertyPath: worldBounds.height
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 37288a3b8666f8748954edea6a4cd6c3, type: 2}
   m_IsPrefabParent: 0
---- !u!1 &1901326982 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1774911888059988, guid: 37288a3b8666f8748954edea6a4cd6c3,
-    type: 2}
-  m_PrefabInternal: {fileID: 1901326981}
---- !u!60 &1901326983
-PolygonCollider2D:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1901326982}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Points:
-    m_Paths:
-    - - {x: -0.43301272, y: 0.25}
-      - {x: 0, y: 0.5}
-      - {x: 0.43301272, y: 0.24999994}
-      - {x: 0.43301272, y: -0.24999994}
-      - {x: 0.000000059604645, y: -0.5}
-      - {x: -0.4330127, y: -0.25000003}
---- !u!114 &1901326984
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1901326982}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b40fb4e911f81084e96fda561e8812e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentHealth: 1000
-  maxHealth: 1000
---- !u!114 &1901326989
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1901326982}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 293aa5469b054064795ee5b982746873, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WorldWrap : MonoBehaviour
 {
-
+    
     public Rect worldBounds = new Rect(-40, -40, 80, 80);
     public bool enableNineGhost = true;
 
@@ -16,20 +16,25 @@ public class WorldWrap : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Sprite ghostSprite = GetComponent<SpriteRenderer>().sprite;
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        Sprite ghostSprite = spriteRenderer.sprite;
+        Color ghostColor = spriteRenderer.color;
 
         if (enableNineGhost)
         {
             ghostTransforms = new Transform[8];
 
             anchor = new GameObject(name + "_Ghost_Anchor");
+            anchor.transform.position = transform.position;
 
             Vector3[] neighborhood = GetNeighborhood(transform.position, worldBounds);
 
             for (int i = 0; i < neighborhood.Length; i++)
             {
                 GameObject ghost = new GameObject(name + "_Ghost");
-                ghost.AddComponent<SpriteRenderer>().sprite = ghostSprite;
+                var sr = ghost.AddComponent<SpriteRenderer>();
+                sr.sprite = ghostSprite;
+                sr.color = ghostColor;
                 ghost.transform.SetParent(anchor.transform);
                 ghost.transform.localScale = transform.localScale;
                 ghost.transform.position = neighborhood[i];
@@ -37,6 +42,12 @@ public class WorldWrap : MonoBehaviour
                 ghostTransforms[i] = ghost.transform;
             }
         }
+    }
+
+    private void OnDisable()
+    {
+        if (enableNineGhost)
+            Destroy(anchor);
     }
 
     private void OnDrawGizmos()
