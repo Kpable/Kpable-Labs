@@ -62,11 +62,14 @@ public class Weapon : MonoBehaviour {
                 break;
             case WeaponType.spread:
                 p = MakeProjectile();
-                p.GetComponent<Rigidbody2D>().velocity = Vector3.up * def.velocity;
+                p.transform.rotation = transform.rotation;
+                p.GetComponent<Rigidbody2D>().velocity = transform.rotation * Vector3.up * def.velocity;
                 p = MakeProjectile();
-                p.GetComponent<Rigidbody2D>().velocity = new Vector3(-0.2f, 0.9f, 0) * def.velocity;
+                p.transform.rotation = transform.rotation;
+                p.GetComponent<Rigidbody2D>().velocity = transform.rotation * new Vector3(-0.2f, 0.9f, 0) * def.velocity;
                 p = MakeProjectile();
-                p.GetComponent<Rigidbody2D>().velocity = new Vector3(0.2f, 0.9f, 0) * def.velocity;
+                p.transform.rotation = transform.rotation;
+                p.GetComponent<Rigidbody2D>().velocity = transform.rotation * new Vector3(0.2f, 0.9f, 0) * def.velocity;
                 break;
         }
     }
