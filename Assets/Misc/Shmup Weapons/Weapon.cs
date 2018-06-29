@@ -29,18 +29,54 @@ public class WeaponDefinition
 
 public class Weapon : MonoBehaviour {
 
-
-
-
-
+    public WeaponType _type = WeaponType.blaster;
+    public WeaponDefinition def;
+    public GameObject collar;
+    public float lastShot;
 
     // Use this for initialization
     void Start () {
-		
-	}
+        def = Main.GetWeaponDefinition(_type);
+    }
 	
 	// Update is called once per frame
 	void Update () {
-		
+        if (Input.GetAxis("Jump") == 1)
+            Fire();
 	}
+
+    public void Fire()
+    {
+        if (!gameObject.activeInHierarchy) return;
+        if (Time.time - lastShot < def.delayBetweenShots) return;
+
+        Projectile p;
+        switch (_type)
+        {
+            case WeaponType.blaster:
+                p = MakeProjectile();
+                p.GetComponent<Rigidbody2D>().velocity = Vector3.up * def.velocity;
+                break;
+            case WeaponType.spread:
+                p = MakeProjectile();
+                p.GetComponent<Rigidbody2D>().velocity = Vector3.up * def.velocity;
+                p = MakeProjectile();
+                p.GetComponent<Rigidbody2D>().velocity = new Vector3(-0.2f, 0.9f, 0) * def.velocity;
+                p = MakeProjectile();
+                p.GetComponent<Rigidbody2D>().velocity = new Vector3(0.2f, 0.9f, 0) * def.velocity;
+                break;
+        }
+    }
+
+    public Projectile MakeProjectile()
+    {
+        GameObject go = Instantiate(def.projectilePrefab);
+
+        go.transform.position = collar.transform.position;
+        //go.transform.parent = PROJECTILE_ANCHOR;
+        Projectile p = go.GetComponent<Projectile>();
+        p.type = _type;
+        lastShot = Time.time;
+        return (p);
+    }
 }
