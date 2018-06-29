@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using Kpable.Mechanics;
+
 public class Projectile : MonoBehaviour, IPooledObject {
 
     [SerializeField]
@@ -39,13 +41,14 @@ public class Projectile : MonoBehaviour, IPooledObject {
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
-        Debug.Log("Hit something:" + collider.name);
+        Debug.Log(name + " hit something:" + collider.name);
 
         Health health = collider.gameObject.GetComponent<Health>();
         if (health != null)
-            health.Damage(damage);
+        {
+            health.Damage((int)Main.W_DEFS[_type].damageOnHit);
+            gameObject.SetActive(false);
+        }
 
-        CancelInvoke("Die");
-        Die();
     }
 }
