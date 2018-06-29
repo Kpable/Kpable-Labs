@@ -63,7 +63,7 @@ public class WorldWrap : MonoBehaviour
     void Update()
     {
         Wrap();
-        if (enableNineGhost)
+        if (enableNineGhost && anchor)
             UpdateGhostsTransforms();
     }
 
