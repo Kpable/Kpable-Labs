@@ -55,7 +55,8 @@ public class Weapon : MonoBehaviour {
         {
             case WeaponType.blaster:
                 p = MakeProjectile();
-                p.GetComponent<Rigidbody2D>().velocity = Vector3.up * def.velocity;
+                p.transform.rotation = transform.rotation;
+                p.GetComponent<Rigidbody2D>().velocity = transform.rotation * Vector3.up * def.velocity;
                 break;
             case WeaponType.spread:
                 p = MakeProjectile();

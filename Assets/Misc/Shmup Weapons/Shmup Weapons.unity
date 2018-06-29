@@ -150,7 +150,7 @@ MonoBehaviour:
     damageOnHit: 50
     continuousDamage: 0
     delayBetweenShots: 0.2
-    velocity: 50
+    velocity: 10
   - type: 2
     letter: S
     color: {r: 1, g: 1, b: 1, a: 1}
@@ -160,7 +160,7 @@ MonoBehaviour:
     damageOnHit: 50
     continuousDamage: 0
     delayBetweenShots: 0.4
-    velocity: 50
+    velocity: 20
 --- !u!4 &194491971
 Transform:
   m_ObjectHideFlags: 0
@@ -408,6 +408,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c092ba07c91a4ee4485fd719abd33c6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _type: 1
   def:
     type: 0
     letter: 
