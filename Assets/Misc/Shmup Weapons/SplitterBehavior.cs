@@ -7,8 +7,8 @@ public class SplitterBehavior : MonoBehaviour {
 
     public int numberOfSplits = 3;  // number of times to split
     public int splitFactor = 2; // split by this each time
-    public float sizeReduction = 0.5f;
-    public string poolTag;
+    public float sizeReduction = 0.5f; // scale size and health by this
+    public string poolTag; // tag name for object pooler
 
     Health health;
     ObjectPooler objectPooler;
