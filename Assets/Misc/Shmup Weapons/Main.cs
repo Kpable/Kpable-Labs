@@ -2,32 +2,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Main : MonoBehaviour {
-    static public Dictionary<WeaponType, WeaponDefinition> W_DEFS;
-    public WeaponDefinition[] weaponDefinitions;
-
-    void Awake()
+namespace Kpable.Shmup
+{
+    public class Main : MonoBehaviour
     {
-        W_DEFS = new Dictionary<WeaponType, WeaponDefinition>();
-        foreach (WeaponDefinition def in weaponDefinitions)
-        {
-            W_DEFS[def.type] = def;
-        }
-    }
+        static public Dictionary<WeaponType, WeaponDefinition> W_DEFS;
+        public WeaponDefinition[] weaponDefinitions;
 
-    static public WeaponDefinition GetWeaponDefinition(WeaponType wt)
-    {
-        if (W_DEFS.ContainsKey(wt))
+        void Awake()
         {
-            return W_DEFS[wt];
+            W_DEFS = new Dictionary<WeaponType, WeaponDefinition>();
+            foreach (WeaponDefinition def in weaponDefinitions)
+            {
+                W_DEFS[def.type] = def;
+            }
         }
 
-        // failed to find the WeaponDefintion
-        return new WeaponDefinition();
-    }
+        static public WeaponDefinition GetWeaponDefinition(WeaponType wt)
+        {
+            if (W_DEFS.ContainsKey(wt))
+            {
+                return W_DEFS[wt];
+            }
 
-    // Update is called once per frame
-    void Update () {
-		
-	}
+            // failed to find the WeaponDefintion
+            return new WeaponDefinition();
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+    }
 }
