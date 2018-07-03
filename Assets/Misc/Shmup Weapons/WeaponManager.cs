@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Kpable.Shmup
 {
-    public class Main : MonoBehaviour
+    public class WeaponManager: MonoBehaviour
     {
         static public Dictionary<WeaponType, WeaponDefinition> W_DEFS;
         public WeaponDefinition[] weaponDefinitions;

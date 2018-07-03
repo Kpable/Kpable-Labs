@@ -5,6 +5,8 @@ using Kpable.Mechanics;
 
 namespace Kpable.Behaviors
 {
+    // Currently Coupled with Health and ObjectPooler
+    [RequireComponent(typeof(Health))]
     public class SplitterBehavior : MonoBehaviour
     {
 
@@ -22,7 +24,6 @@ namespace Kpable.Behaviors
             health.OnHealthDroppedToZero += Split;
             objectPooler = ObjectPooler.Instance;
         }
-
 
         void Split()
         {

@@ -31,7 +31,7 @@ namespace Kpable.Shmup
         public void SetType(WeaponType eType)
         {
             _type = eType;
-            WeaponDefinition def = Main.GetWeaponDefinition(_type);
+            WeaponDefinition def = WeaponManager.GetWeaponDefinition(_type);
             GetComponent<Renderer>().material.color = def.projectileColor;
 
         }
@@ -48,7 +48,7 @@ namespace Kpable.Shmup
             Health health = collider.gameObject.GetComponent<Health>();
             if (health != null)
             {
-                health.Damage((int)Main.W_DEFS[_type].damageOnHit);
+                health.Damage((int)WeaponManager.W_DEFS[_type].damageOnHit);
                 gameObject.SetActive(false);
             }
 
