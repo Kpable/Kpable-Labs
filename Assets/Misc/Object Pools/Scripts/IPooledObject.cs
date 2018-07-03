@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public interface IPooledObject
+namespace Kpable.Mechanics
 {
-    void OnObjectSpawned();
+    public interface IPooledObject
+    {
+        void OnObjectSpawned();
+    }
 }
