@@ -68,6 +68,7 @@ namespace Kpable.Shmup
             if (Input.GetAxis("Jump") == 1)
                 Fire();
 
+            // Dev keys
             if (Input.GetKeyDown(KeyCode.Z))
                 AddGun();
             if (Input.GetKeyDown(KeyCode.X))
@@ -130,6 +131,11 @@ namespace Kpable.Shmup
         }
         void RefreshGun()
         {
+            //for (int i = 0; i < gunObjects.Count; i++)
+            //{
+            //    RemoveGun();
+            //}
+            //CreateGuns();
             PositionGuns();
         }
 
@@ -142,10 +148,18 @@ namespace Kpable.Shmup
                     GameObject gunObject = Instantiate(gunPrefab);
                     gunObject.transform.SetParent(transform);
                     gunObjects.Add(gunObject.transform);
-
                 }
 
                 PositionGuns();
+            }
+            else if(gunObjects.Count > def.guns)
+            {
+                for (int i = 0; i < gunObjects.Count; i++)
+                {
+                    if (i <= def.guns - 1)
+                        continue;
+                    gunObjects[i].gameObject.SetActive(false);
+                }
             }
         }
 
