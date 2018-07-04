@@ -65,6 +65,7 @@ namespace Kpable.Shmup {
             var col = collision.GetComponent<PowerUp>();
             if ( col != null)
             {
+                Debug.Log("Hit PowerUp");
                 weapon.WeaponType = col.weaponType;
             }
     }
