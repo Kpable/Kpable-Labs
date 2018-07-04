@@ -4,7 +4,7 @@ using System;
 
 namespace Kpable.Utilities
 {
-    public enum Direction { Up, Left, Down, Right }
+    public enum Direction { UpLeft, Up, UpRight, Left, Center, Right, DownLeft, Down, DownRight }
     public enum Axis { X, Y, Z, XY, XZ, YZ, XYZ }
 
     [Serializable]
@@ -28,16 +28,17 @@ namespace Kpable.Utilities
         {
             switch (dir)
             {
-                case Direction.Up:
-                    return Vector3.up;
-                case Direction.Left:
-                    return Vector3.left;
-                case Direction.Down:
-                    return Vector3.down;
-                case Direction.Right:
-                    return Vector3.right;
-                default:
-                    return Vector3.up;
+                case Direction.UpLeft:      return Vector3.up + Vector3.left;
+                case Direction.Up:          return Vector3.up;
+                case Direction.UpRight:     return Vector3.up + Vector3.right;
+                case Direction.Left:        return Vector3.left;
+                case Direction.Center:      return Vector3.zero;
+                case Direction.Right:       return Vector3.right;
+                case Direction.DownLeft:    return Vector3.down + Vector3.left;
+                case Direction.Down:        return Vector3.down;
+                case Direction.DownRight:   return Vector3.down + Vector3.right;
+                default:                    return Vector3.up;
+                   
             }
         }
 
