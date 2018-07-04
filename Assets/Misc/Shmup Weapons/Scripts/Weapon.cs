@@ -10,7 +10,7 @@ namespace Kpable.Shmup
     {
         none,
         blaster,
-        spread,
+        triple,
         phaser,
         missle,
         laser,
@@ -38,12 +38,14 @@ namespace Kpable.Shmup
         [SerializeField]
         WeaponType weaponType = WeaponType.blaster;
 
+        public WeaponType WeaponType { get { return weaponType; } set { weaponType = value; def = WeaponManager.GetWeaponDefinition(weaponType); CreateGuns(); } }
+        public float gunRadius = 1f;
+        public float angleBetweenGuns = 15f;
+        public float angleOffset = 90f;
+        public GameObject gunPrefab;
 
-        public WeaponType WeaponType { get { return weaponType; } set { weaponType = value; PositionGuns(); } }
-        [HideInInspector]
-        public WeaponDefinition def;
-        public float lastShot;
-        public float gunRadius = 1;
+        WeaponDefinition def;
+        float lastShot;
         
        
 
@@ -57,7 +59,7 @@ namespace Kpable.Shmup
             gunObjects = new List<Transform>();
 
             CreateGuns();
-
+            Debug.Log("Angle " + Vector3.Angle(Vector3.right, transform.rotation.eulerAngles));
         }
 
         // Update is called once per frame
@@ -65,6 +67,15 @@ namespace Kpable.Shmup
         {
             if (Input.GetAxis("Jump") == 1)
                 Fire();
+
+            if (Input.GetKeyDown(KeyCode.Z))
+                AddGun();
+            if (Input.GetKeyDown(KeyCode.X))
+                RemoveGun();
+            if (Input.GetKeyDown(KeyCode.C))
+                RefreshGun();
+
+
         }
 
         public void Fire()
@@ -78,12 +89,11 @@ namespace Kpable.Shmup
             {
                 case WeaponType.blaster:
                     p = MakeProjectile();
+                    p.transform.position = gunObjects[0].position;
                     p.transform.rotation = transform.rotation;
                     p.GetComponent<Rigidbody2D>().velocity = transform.rotation * Vector3.up * def.velocity;
                     break;
-                case WeaponType.spread:
-
-
+                case WeaponType.triple:
                     p = MakeProjectile();
                     p.transform.position = gunObjects[0].position;
                     p.transform.rotation = transform.rotation;
@@ -103,17 +113,38 @@ namespace Kpable.Shmup
             }
         }
 
+        void AddGun()
+        {
+            GameObject gunObject = Instantiate(gunPrefab);
+            gunObject.transform.SetParent(transform);
+            gunObjects.Add(gunObject.transform);
+            RefreshGun();
+        }
+        void RemoveGun()
+        {
+            Transform go = gunObjects[gunObjects.Count - 1];
+            gunObjects.RemoveAt(gunObjects.Count - 1);
+            Destroy(go.gameObject);
+            RefreshGun();
+
+        }
+        void RefreshGun()
+        {
+            PositionGuns();
+        }
+
         private void CreateGuns()
         {
             if (gunObjects.Count < def.guns)
             {
                 for (int i = gunObjects.Count; i < def.guns; i++)
                 {
-                    GameObject gunObject = new GameObject("Gun");
+                    GameObject gunObject = Instantiate(gunPrefab);
                     gunObject.transform.SetParent(transform);
                     gunObjects.Add(gunObject.transform);
 
                 }
+
                 PositionGuns();
             }
         }
@@ -122,7 +153,15 @@ namespace Kpable.Shmup
         {
             for (int i = 0; i < gunObjects.Count; i++)
             {
-                gunObjects[i].position = GetPositionInCircle(transform.position, (i * 45) + 45, gunRadius);
+                float angle = 0;
+                angle += i * angleBetweenGuns;        // offset angle of gun[i]
+                angle *= ((i % 2 == 0) ? 1 : -1);     // let the guns position in alternating sides
+                angle += angleOffset;                 // right = 0 on unit circle so offset starting axis
+                angle += (i % 2 == 0) ? 0 : -angleBetweenGuns;  // 
+                angle += (gunObjects.Count % 2 == 0) ? angleBetweenGuns : 0; // if there are even number of guns space evenly from center
+                angle += transform.rotation.eulerAngles.z;  // account for current object's rotation
+
+                gunObjects[i].position = GetPositionInCircle(transform.position, angle, gunRadius);
             }
         }
 
@@ -130,8 +169,6 @@ namespace Kpable.Shmup
         {
             //GameObject go = Instantiate(def.projectilePrefab);
             GameObject go = objectPooler.SpawnFromPool("projectile");
-
-
             //go.transform.parent = PROJECTILE_ANCHOR;
             Projectile p = go.GetComponent<Projectile>();
             p.type = weaponType;
