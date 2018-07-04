@@ -21,6 +21,7 @@ namespace Kpable.Shmup
     public class WeaponDefinition
     {
         public WeaponType type = WeaponType.none;
+        public string tag;
         public string letter;
         public Color color = Color.white;
         public GameObject projectilePrefab;
@@ -111,6 +112,12 @@ namespace Kpable.Shmup
                     p.transform.rotation = transform.rotation;
                     p.GetComponent<Rigidbody2D>().velocity = transform.rotation * Vector3.up * def.velocity;
                     break;
+                case WeaponType.laser:
+                    p = MakeProjectile();
+                    p.transform.position = gunObjects[0].position;
+                    p.transform.rotation = transform.rotation;
+                    p.GetComponent<Rigidbody2D>().velocity = transform.rotation * Vector3.up * def.velocity;
+                    break;
             }
         }
 
@@ -147,6 +154,7 @@ namespace Kpable.Shmup
                 {
                     GameObject gunObject = Instantiate(gunPrefab);
                     gunObject.transform.SetParent(transform);
+                    gunObject.transform.rotation = Quaternion.identity;
                     gunObjects.Add(gunObject.transform);
                 }
 
@@ -181,11 +189,13 @@ namespace Kpable.Shmup
 
         public Projectile MakeProjectile()
         {
-            //GameObject go = Instantiate(def.projectilePrefab);
-            GameObject go = objectPooler.SpawnFromPool("projectile");
+            GameObject go = objectPooler.SpawnFromPool(def.tag);
+            if(go == null)
+                go = Instantiate(def.projectilePrefab);
+            
             //go.transform.parent = PROJECTILE_ANCHOR;
             Projectile p = go.GetComponent<Projectile>();
-            p.type = weaponType;
+            p.Type = weaponType;
             lastShot = Time.time;
             return (p);
         }

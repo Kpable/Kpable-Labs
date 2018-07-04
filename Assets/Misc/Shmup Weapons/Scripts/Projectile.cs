@@ -9,29 +9,14 @@ namespace Kpable.Shmup
     {
 
         [SerializeField]
-        private WeaponType _type;
+        private WeaponType type;
 
-        public WeaponType type
-        {
-            get
-            {
-                return _type;
-            }
-            set
-            {
-                SetType(value);
-            }
-        }
-
-        void Awake()
-        {
-
-        }
+        public WeaponType Type { get { return type; } set { SetType(value); } }
 
         public void SetType(WeaponType eType)
         {
-            _type = eType;
-            WeaponDefinition def = WeaponManager.GetWeaponDefinition(_type);
+            type = eType;
+            WeaponDefinition def = WeaponManager.GetWeaponDefinition(type);
             GetComponent<Renderer>().material.color = def.projectileColor;
 
         }
@@ -41,14 +26,14 @@ namespace Kpable.Shmup
             // ;
         }
 
-        private void OnTriggerEnter2D(Collider2D collider)
+        protected virtual void OnTriggerEnter2D(Collider2D collider)
         {
             Debug.Log(name + " hit something:" + collider.name);
 
             Health health = collider.gameObject.GetComponent<Health>();
             if (health != null)
             {
-                health.Damage((int)WeaponManager.W_DEFS[_type].damageOnHit);
+                health.Damage((int)WeaponManager.W_DEFS[type].damageOnHit);
                 gameObject.SetActive(false);
             }
 
