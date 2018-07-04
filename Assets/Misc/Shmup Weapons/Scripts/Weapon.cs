@@ -35,12 +35,14 @@ namespace Kpable.Shmup
     public class Weapon : MonoBehaviour
     {
 
-        public WeaponType weaponType = WeaponType.blaster;
+        [SerializeField]
+        WeaponType weaponType = WeaponType.blaster;
+
+
+        public WeaponType WeaponType { get { return weaponType; } set { weaponType = value; PositionGuns(); } }
         [HideInInspector]
         public WeaponDefinition def;
-        public GameObject collar;
         public float lastShot;
-        public int guns = 1;
         public float gunRadius = 1;
         
        
@@ -52,7 +54,10 @@ namespace Kpable.Shmup
         {
             def = WeaponManager.GetWeaponDefinition(weaponType);
             objectPooler = ObjectPooler.Instance;
-            gunObjects = new List<Transform>();            
+            gunObjects = new List<Transform>();
+
+            CreateGuns();
+
         }
 
         // Update is called once per frame
@@ -67,18 +72,6 @@ namespace Kpable.Shmup
             if (!gameObject.activeInHierarchy) return;
             if (Time.time - lastShot < def.delayBetweenShots) return;
 
-            if (gunObjects.Count < def.guns)
-            {
-                for (int i = gunObjects.Count; i < def.guns; i++)
-                {
-                    GameObject gunObject = new GameObject("Gun");
-                    gunObject.transform.SetParent(transform);
-                    gunObjects.Add(gunObject.transform);
-
-                }
-                PositionGuns();
-            }
-
 
             Projectile p;
             switch (weaponType)
@@ -89,7 +82,7 @@ namespace Kpable.Shmup
                     p.GetComponent<Rigidbody2D>().velocity = transform.rotation * Vector3.up * def.velocity;
                     break;
                 case WeaponType.spread:
-                    
+
 
                     p = MakeProjectile();
                     p.transform.position = gunObjects[0].position;
@@ -110,6 +103,21 @@ namespace Kpable.Shmup
             }
         }
 
+        private void CreateGuns()
+        {
+            if (gunObjects.Count < def.guns)
+            {
+                for (int i = gunObjects.Count; i < def.guns; i++)
+                {
+                    GameObject gunObject = new GameObject("Gun");
+                    gunObject.transform.SetParent(transform);
+                    gunObjects.Add(gunObject.transform);
+
+                }
+                PositionGuns();
+            }
+        }
+
         private void PositionGuns()
         {
             for (int i = 0; i < gunObjects.Count; i++)
@@ -124,7 +132,6 @@ namespace Kpable.Shmup
             GameObject go = objectPooler.SpawnFromPool("projectile");
 
 
-            go.transform.position = collar.transform.position;
             //go.transform.parent = PROJECTILE_ANCHOR;
             Projectile p = go.GetComponent<Projectile>();
             p.type = weaponType;
