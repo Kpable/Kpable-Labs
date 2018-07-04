@@ -10,7 +10,7 @@ namespace Kpable.Shmup
     {
         none,
         blaster,
-        spread,
+        triple,
         phaser,
         missle,
         laser,
@@ -35,13 +35,17 @@ namespace Kpable.Shmup
     public class Weapon : MonoBehaviour
     {
 
-        public WeaponType weaponType = WeaponType.blaster;
-        [HideInInspector]
-        public WeaponDefinition def;
-        public GameObject collar;
-        public float lastShot;
-        public int guns = 1;
-        public float gunRadius = 1;
+        [SerializeField]
+        WeaponType weaponType = WeaponType.blaster;
+
+        public WeaponType WeaponType { get { return weaponType; } set { weaponType = value; def = WeaponManager.GetWeaponDefinition(weaponType); CreateGuns(); } }
+        public float gunRadius = 1f;
+        public float angleBetweenGuns = 15f;
+        public float angleOffset = 90f;
+        public GameObject gunPrefab;
+
+        WeaponDefinition def;
+        float lastShot;
         
        
 
@@ -52,7 +56,10 @@ namespace Kpable.Shmup
         {
             def = WeaponManager.GetWeaponDefinition(weaponType);
             objectPooler = ObjectPooler.Instance;
-            gunObjects = new List<Transform>();            
+            gunObjects = new List<Transform>();
+
+            CreateGuns();
+            Debug.Log("Angle " + Vector3.Angle(Vector3.right, transform.rotation.eulerAngles));
         }
 
         // Update is called once per frame
@@ -60,6 +67,16 @@ namespace Kpable.Shmup
         {
             if (Input.GetAxis("Jump") == 1)
                 Fire();
+
+            // Dev keys
+            if (Input.GetKeyDown(KeyCode.Z))
+                AddGun();
+            if (Input.GetKeyDown(KeyCode.X))
+                RemoveGun();
+            if (Input.GetKeyDown(KeyCode.C))
+                RefreshGun();
+
+
         }
 
         public void Fire()
@@ -67,30 +84,17 @@ namespace Kpable.Shmup
             if (!gameObject.activeInHierarchy) return;
             if (Time.time - lastShot < def.delayBetweenShots) return;
 
-            if (gunObjects.Count < def.guns)
-            {
-                for (int i = gunObjects.Count; i < def.guns; i++)
-                {
-                    GameObject gunObject = new GameObject("Gun");
-                    gunObject.transform.SetParent(transform);
-                    gunObjects.Add(gunObject.transform);
-
-                }
-                PositionGuns();
-            }
-
 
             Projectile p;
             switch (weaponType)
             {
                 case WeaponType.blaster:
                     p = MakeProjectile();
+                    p.transform.position = gunObjects[0].position;
                     p.transform.rotation = transform.rotation;
                     p.GetComponent<Rigidbody2D>().velocity = transform.rotation * Vector3.up * def.velocity;
                     break;
-                case WeaponType.spread:
-                    
-
+                case WeaponType.triple:
                     p = MakeProjectile();
                     p.transform.position = gunObjects[0].position;
                     p.transform.rotation = transform.rotation;
@@ -110,11 +114,68 @@ namespace Kpable.Shmup
             }
         }
 
+        void AddGun()
+        {
+            GameObject gunObject = Instantiate(gunPrefab);
+            gunObject.transform.SetParent(transform);
+            gunObjects.Add(gunObject.transform);
+            RefreshGun();
+        }
+        void RemoveGun()
+        {
+            Transform go = gunObjects[gunObjects.Count - 1];
+            gunObjects.RemoveAt(gunObjects.Count - 1);
+            Destroy(go.gameObject);
+            RefreshGun();
+
+        }
+        void RefreshGun()
+        {
+            //for (int i = 0; i < gunObjects.Count; i++)
+            //{
+            //    RemoveGun();
+            //}
+            //CreateGuns();
+            PositionGuns();
+        }
+
+        private void CreateGuns()
+        {
+            if (gunObjects.Count < def.guns)
+            {
+                for (int i = gunObjects.Count; i < def.guns; i++)
+                {
+                    GameObject gunObject = Instantiate(gunPrefab);
+                    gunObject.transform.SetParent(transform);
+                    gunObjects.Add(gunObject.transform);
+                }
+
+                PositionGuns();
+            }
+            else if(gunObjects.Count > def.guns)
+            {
+                for (int i = 0; i < gunObjects.Count; i++)
+                {
+                    if (i <= def.guns - 1)
+                        continue;
+                    gunObjects[i].gameObject.SetActive(false);
+                }
+            }
+        }
+
         private void PositionGuns()
         {
             for (int i = 0; i < gunObjects.Count; i++)
             {
-                gunObjects[i].position = GetPositionInCircle(transform.position, (i * 45) + 45, gunRadius);
+                float angle = 0;
+                angle += i * angleBetweenGuns;        // offset angle of gun[i]
+                angle *= ((i % 2 == 0) ? 1 : -1);     // let the guns position in alternating sides
+                angle += angleOffset;                 // right = 0 on unit circle so offset starting axis
+                angle += (i % 2 == 0) ? 0 : -angleBetweenGuns;  // 
+                angle += (gunObjects.Count % 2 == 0) ? angleBetweenGuns : 0; // if there are even number of guns space evenly from center
+                angle += transform.rotation.eulerAngles.z;  // account for current object's rotation
+
+                gunObjects[i].position = GetPositionInCircle(transform.position, angle, gunRadius);
             }
         }
 
@@ -122,9 +183,6 @@ namespace Kpable.Shmup
         {
             //GameObject go = Instantiate(def.projectilePrefab);
             GameObject go = objectPooler.SpawnFromPool("projectile");
-
-
-            go.transform.position = collar.transform.position;
             //go.transform.parent = PROJECTILE_ANCHOR;
             Projectile p = go.GetComponent<Projectile>();
             p.type = weaponType;
