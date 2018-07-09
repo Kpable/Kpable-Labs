@@ -9,13 +9,15 @@ namespace Kpable.AI.Steering
     public class SteeringBehavior
     {
         // Behavior settings
-        public bool seek = true;
+        public bool seek;
         public bool flee;
-        public bool arrive = false;
+        public bool arrive;
         public bool pursuit;
         public bool evade;
-        public bool wander = false;
-        float decelerationModifier = 0.2f;
+        public bool wander;
+        public float decelerationModifier = 0.2f;
+        public float arrivalRadius = 10f; 
+
 
         Vehicle vehicle;
 
@@ -51,54 +53,65 @@ namespace Kpable.AI.Steering
         /// <returns></returns>
         Vector3 Seek (Vector3 targetPosition)
         {
-            Vector3 toTarget = targetPosition - vehicle.Position;
-            Vector3 desiredVelocity = toTarget.normalized * vehicle.MaxSpeed;
-
+            Vector3 distanceToTarget = targetPosition - vehicle.Position;
+            Vector3 desiredVelocity = distanceToTarget.normalized * vehicle.MaxSpeed;
+            Vector3 steeringForce = desiredVelocity - vehicle.Velocity;
+            steeringForce = steeringForce.normalized * vehicle.MaxForce;
             //Debug.DrawLine(vehicle.Position, desiredVelocity, Color.green);
-            
-            return desiredVelocity - vehicle.Velocity;
+
+            return steeringForce;
         }
 
         Vector3 Flee(Vector3 targetPosition)
         {
-            // float panicDistance = 100f;
-            //if (Vector3.Distance(vehicle.Position, targetPosition) > panicDistance)
-            //{
-            //    return Vector3.zero;
-            //}
+            Vector3 distanceToTarget = vehicle.Position - targetPosition;
+            Vector3 desiredVelocity = distanceToTarget.normalized * vehicle.MaxSpeed;
+            Vector3 steeringForce = desiredVelocity - vehicle.Velocity;
+            steeringForce = steeringForce.normalized * vehicle.MaxForce;
+            //Debug.DrawLine(vehicle.Position, desiredVelocity, Color.green);
 
-            Vector3 toTarget =  vehicle.Position - targetPosition;
-            Vector3 desiredVelocity = toTarget.normalized * vehicle.MaxSpeed;
-
-            return desiredVelocity - vehicle.Velocity;
+            return steeringForce;
         }
 
         Vector3 Arrive(Vector3 targetPosition, Deceleration deceleration)
         {
-            Vector3 toTarget = targetPosition - vehicle.Position;
+            Vector3 distanceToTarget = targetPosition - vehicle.Position;
             
-            float distance = toTarget.magnitude;
+            float distance = distanceToTarget.magnitude;
 
             //Debug.Log("distance " + distance);
+            //Debug.Log("rad " + arrivalRadius);
 
-            if (distance > 0)
+            if (distance < arrivalRadius)
             {
-                float speed = distance / ((float)deceleration * decelerationModifier);
-
+                //float speed = distance / ((float)deceleration * decelerationModifier);
+                float speed = Map(distance, 0, arrivalRadius, 0, vehicle.MaxSpeed);
                 //Debug.Log("deceleration " + ((int)deceleration * decelerationModifier));
 
-                //Debug.Log("speed " + speed);
+                Debug.Log("speed " + speed);
+                Vector3 desiredVelocity = distanceToTarget.normalized * speed;
+                Vector3 steeringForce = desiredVelocity - vehicle.Velocity;
+                steeringForce = steeringForce.normalized * vehicle.MaxForce;
+                //speed = Mathf.Clamp(speed, speed, vehicle.MaxSpeed);
 
-                speed = Mathf.Clamp(speed, speed, vehicle.MaxSpeed);
-
-                Vector3 desiredVelocity = toTarget * speed / distance;
+                //Vector3 desiredVelocity = toTarget * speed / distance;
 
                 //Debug.Log("speed " + speed + " desiredVelocity " + desiredVelocity);
 
-                return desiredVelocity - vehicle.Velocity;
+                return steeringForce;
             }
+            else
+            {
+                Vector3 desiredVelocity = distanceToTarget.normalized * vehicle.MaxSpeed;
+                Vector3 steeringForce = desiredVelocity - vehicle.Velocity;
+                steeringForce = steeringForce.normalized * vehicle.MaxForce;
+                return steeringForce;
+            }
+        }
 
-            return Vector3.zero;
+        public float Map(float value, float fromMin, float fromMax, float toMin, float toMax)
+        {
+            return (value - fromMin) / ( (toMin - fromMin) * (toMax - fromMax) + fromMax ) ;
         }
 
         Vector3 Pursuit(Vehicle evader)
@@ -148,13 +161,13 @@ namespace Kpable.AI.Steering
 
         Vector3 ObstacleAvoidance( GameObject[] obstacles)
         {
-            // Define the detection length of the box proportional to the agent's velocity
-            float minBoxlength = 40f;
-            float boxLength = minBoxlength + (vehicle.Speed / vehicle.MaxSpeed) * minBoxlength;
+            //// Define the detection length of the box proportional to the agent's velocity
+            //float minBoxlength = 40f;
+            //float boxLength = minBoxlength + (vehicle.Speed / vehicle.MaxSpeed) * minBoxlength;
 
             // grab a list of obstacles in that path
             //Physics.OverlapBox()
-
+            
             return Vector3.zero;
         }
     }

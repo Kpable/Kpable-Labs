@@ -12,8 +12,10 @@ namespace Kpable.AI.Steering
         //protected Vector3 velocity;
         protected Vector3 heading;
         protected Vector3 sideComponent;
+        [SerializeField]
         protected float maxSpeed;
-        //protected float maxForce;
+        [SerializeField]
+        protected float maxForce;
         protected float maxTurnRate;
 
         //public Vector3 Position { get { return position; } set { position = value; } }
@@ -24,11 +26,11 @@ namespace Kpable.AI.Steering
 
         public float Speed { get { return Velocity.magnitude; } }
         public float MaxSpeed { get { return maxSpeed; } set { maxSpeed = value; } }
-        //public float MaxForce { get { return maxForce; } set { maxForce = value; } }
+        public float MaxForce { get { return maxForce; } set { maxForce = value; } }
         public float MaxTurnRate { get { return maxTurnRate; } set { maxTurnRate = value; } }
 
 
-        private void Awake()
+        protected virtual void Awake()
         {
             rb = GetComponent<Rigidbody>();
         }

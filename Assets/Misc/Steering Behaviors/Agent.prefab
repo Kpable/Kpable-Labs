@@ -69,7 +69,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1928883506988972}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.5, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4557925334469782}
@@ -91,7 +91,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 3e881b9cc5834844493ee41db2121052, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -210,13 +210,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414888b14cd75264f89a3a8d962f7a93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  steering:
-    seek: 0
-    flee: 0
-    arrive: 0
-    pursuit: 0
-    evade: 0
-    wander: 0
+  maxSpeed: 100
+  maxForce: 20
   target: {x: 0, y: 0, z: 0}
   targetTransform: {fileID: 0}
   targetVehicle: {fileID: 0}

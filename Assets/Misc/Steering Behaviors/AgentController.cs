@@ -8,13 +8,15 @@ namespace Kpable.AI.Steering {
         public Transform targets;
         public GameObject agentPrefab;
         public float radius = 20;
+
         // Use this for initialization
         void Start() {
             for (int i = 0; i < targets.childCount; i++)
             {
-                GameObject go = Instantiate(agentPrefab, new Vector3(Random.Range(-radius, radius), 1, Random.Range(-radius, radius)), Quaternion.identity);
+                GameObject go = Instantiate(agentPrefab, new Vector3(Random.Range(-radius, radius), 0, Random.Range(-radius, radius)), Quaternion.identity);
                 var v = go.GetComponent<Vehicle>();
-                v.targetTransform = targets.GetChild(i);
+                v.Seek(targets.GetChild(i));
+                //v.Arrive(targets.GetChild(i));
             }
         }
 
