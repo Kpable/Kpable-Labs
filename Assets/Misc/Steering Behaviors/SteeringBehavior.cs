@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Kpable.AI.Steering
 {   
+    [System.Serializable]
     public class SteeringBehavior
     {
         // Behavior settings
@@ -53,7 +54,7 @@ namespace Kpable.AI.Steering
             Vector3 toTarget = targetPosition - vehicle.Position;
             Vector3 desiredVelocity = toTarget.normalized * vehicle.MaxSpeed;
 
-            Debug.DrawLine(vehicle.Position, desiredVelocity, Color.green);
+            //Debug.DrawLine(vehicle.Position, desiredVelocity, Color.green);
             
             return desiredVelocity - vehicle.Velocity;
         }

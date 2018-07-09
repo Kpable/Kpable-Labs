@@ -6,6 +6,7 @@ namespace Kpable.AI.Steering
 {
     public class Vehicle : MovingEntity
     {         
+        [SerializeField]
         SteeringBehavior steering;
 
         public Vector3 target;
@@ -28,30 +29,32 @@ namespace Kpable.AI.Steering
         // Update is called once per frame
         void FixedUpdate()
         {
-            target = targetTransform.position;
-
-            // Calculate the combined force from each active behavior
-            Vector3 steeringForce  = steering.Calulate(); 
-
-            // Accelaration = Force/Mass
-            Vector3 acceleration = steeringForce / rb.mass;
-
-            // Update Velocity
-            rb.velocity += acceleration * Time.deltaTime;
-
-            // Do not exeed max velocity
-            Velocity = Velocity.normalized * Mathf.Clamp(Velocity.magnitude, Velocity.magnitude, maxSpeed);
-
-            // Update the position 
-            //position += velocity * Time.deltaTime;
-
-            // Update the heading
-            if (Velocity.sqrMagnitude > 0.000001f)
+            if (targetTransform)
             {
-                heading = Velocity.normalized;
-                //sideComponent = heading.perpendicular;
-            }
+                target = targetTransform.position;
 
+                // Calculate the combined force from each active behavior
+                Vector3 steeringForce = steering.Calulate();
+
+                // Accelaration = Force/Mass
+                Vector3 acceleration = steeringForce / rb.mass;
+
+                // Update Velocity
+                rb.velocity += acceleration * Time.deltaTime;
+
+                // Do not exeed max velocity
+                Velocity = Velocity.normalized * Mathf.Clamp(Velocity.magnitude, Velocity.magnitude, maxSpeed);
+
+                // Update the position 
+                //position += velocity * Time.deltaTime;
+
+                // Update the heading
+                if (Velocity.sqrMagnitude > 0.000001f)
+                {
+                    heading = Velocity.normalized;
+                    //sideComponent = heading.perpendicular;
+                }
+            }
             //transform.position = Position;
             //transform.LookAt(heading);
             //transform.rotation = Quaternion.Euler(heading);
