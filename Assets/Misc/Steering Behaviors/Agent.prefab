@@ -126,7 +126,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 3e881b9cc5834844493ee41db2121052, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -210,8 +210,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414888b14cd75264f89a3a8d962f7a93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 100
-  maxForce: 20
+  maxSpeed: 10
+  maxForce: 2
+  steering:
+    seek: 0
+    flee: 0
+    arrive: 0
+    pursuit: 0
+    evade: 0
+    wander: 0
+    decelerationModifier: 0.2
+    arrivalSlowRadius: 10
+    arrivalStopRadius: 0.02
   target: {x: 0, y: 0, z: 0}
   targetTransform: {fileID: 0}
   targetVehicle: {fileID: 0}

@@ -27,8 +27,12 @@ namespace Kpable.AI.Steering
             //heading = Velocity;
             //maxSpeed = 15f;
             //maxForce = 2f;
-            maxTurnRate = 3f;
+            //maxTurnRate = 3f;
 
+            //Testing Map function
+            //Debug.Log(steering.Map(2, 1, 3, 0, 10)); // 5
+            //Debug.Log(steering.Map(5, 0, 10, 1, 3)); // 2
+            //Debug.Log(steering.Map(20, 0, 40, 1, 5)); // 3
         }
 
         // Update is called once per frame
@@ -43,12 +47,12 @@ namespace Kpable.AI.Steering
 
                 // Accelaration = Force/Mass
                 Vector3 acceleration = steeringForce / rb.mass;
-                
+
 
                 // Update Velocity
-                rb.velocity += acceleration * Time.deltaTime;
+                rb.velocity += acceleration;
 
-                transform.Rotate(Velocity.normalized);
+                //transform.Rotate(Velocity.normalized);
                 // Do not exeed max velocity
                 //Velocity = Velocity.normalized * Mathf.Clamp(Velocity.magnitude, Velocity.magnitude, maxSpeed);
 
