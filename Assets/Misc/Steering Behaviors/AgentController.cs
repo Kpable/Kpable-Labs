@@ -15,7 +15,7 @@ namespace Kpable.AI.Steering {
             {
                 GameObject go = Instantiate(agentPrefab, new Vector3(Random.Range(-radius, radius), 0, Random.Range(-radius, radius)), Quaternion.identity);
                 var v = go.GetComponent<Vehicle>();
-                v.Seek(targets.GetChild(i));
+                //v.Seek(targets.GetChild(i));
                 v.Arrive(targets.GetChild(i));
             }
         }

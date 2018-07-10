@@ -17,7 +17,7 @@ namespace Kpable.AI.Steering
         public bool wander;
         public float decelerationModifier = 0.2f;
         public float arrivalSlowRadius = 10f;
-        public float arrivalStopRadius = 0.02f;
+        public float arrivalStopRadius = 0.001f;
 
 
         Vehicle vehicle;
@@ -80,7 +80,7 @@ namespace Kpable.AI.Steering
             
             float distance = distanceToTarget.magnitude;
 
-            Debug.Log("distance " + distance);
+            //Debug.Log("distance " + distance);
             //Debug.Log("rad " + arrivalRadius);
             Vector3 desiredVelocity = Vector3.zero;
             if(distance < arrivalStopRadius)
@@ -92,8 +92,8 @@ namespace Kpable.AI.Steering
                 //float speed = distance / ((float)deceleration * decelerationModifier);
                 float speed = Map(distance, 0, arrivalSlowRadius, 0, vehicle.MaxSpeed);
                 //Debug.Log("deceleration " + ((int)deceleration * decelerationModifier));
-
-                //Debug.Log("speed " + speed);
+                
+                //Debug.Log("speed " + speed + " distance " + distance);
                 desiredVelocity = distanceToTarget.normalized * speed;
                 //speed = Mathf.Clamp(speed, speed, vehicle.MaxSpeed);
 
@@ -108,8 +108,8 @@ namespace Kpable.AI.Steering
             }
 
             Vector3 steeringForce = desiredVelocity - vehicle.Velocity;
-            
-            //steeringForce = steeringForce.normalized * Mathf.Clamp(steeringForce.magnitude, steeringForce.magnitude, vehicle.MaxForce);
+            steeringForce = steeringForce.normalized * Mathf.Clamp(steeringForce.magnitude, 0, vehicle.MaxForce);
+            //Debug.Log("Arrival SteeringForce: " + steeringForce.magnitude );
             return steeringForce;
         }
 
