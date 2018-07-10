@@ -18,6 +18,7 @@ namespace Kpable.AI.Steering
         public float decelerationModifier = 0.2f;
         public float arrivalSlowRadius = 10f;
         public float arrivalStopRadius = 0.001f;
+        public float fleeRadius = 5f; 
 
 
         Vehicle vehicle;
@@ -36,7 +37,7 @@ namespace Kpable.AI.Steering
 
             if(seek) totalForce += Seek(vehicle.target);
             if(arrive) totalForce += Arrive(vehicle.target, Deceleration.Slow);
-            if(flee) totalForce += Flee(vehicle.target);
+            if(flee) totalForce += Flee(vehicle.target) * 2;
             if(pursuit) totalForce += Pursuit(vehicle.targetVehicle);
             if(evade) totalForce += Evade(vehicle.targetVehicle);
             if(wander) totalForce += Wander();
@@ -57,7 +58,7 @@ namespace Kpable.AI.Steering
             Vector3 distanceToTarget = targetPosition - vehicle.Position;
             Vector3 desiredVelocity = distanceToTarget.normalized * vehicle.MaxSpeed;
             Vector3 steeringForce = desiredVelocity - vehicle.Velocity;
-            steeringForce = steeringForce.normalized * vehicle.MaxForce;
+            steeringForce = steeringForce.normalized * Mathf.Clamp(steeringForce.magnitude, 0, vehicle.MaxForce);
             //Debug.DrawLine(vehicle.Position, desiredVelocity, Color.green);
 
             return steeringForce;
@@ -65,10 +66,27 @@ namespace Kpable.AI.Steering
 
         Vector3 Flee(Vector3 targetPosition)
         {
+            // DEBUG
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                targetPosition.x = hit.point.x;
+                targetPosition.z = hit.point.z;
+            }
+            // END DEBUG
             Vector3 distanceToTarget = vehicle.Position - targetPosition;
-            Vector3 desiredVelocity = distanceToTarget.normalized * vehicle.MaxSpeed;
+            float distance = distanceToTarget.magnitude;
+            // If we are farther than the radius, dont flee
+            if (distance > fleeRadius)
+            {
+                return Vector3.zero;
+            }
+            // else, run
+            Vector3 desiredVelocity =  desiredVelocity = distanceToTarget.normalized * vehicle.MaxSpeed;
             Vector3 steeringForce = desiredVelocity - vehicle.Velocity;
-            steeringForce = steeringForce.normalized * vehicle.MaxForce;
+            steeringForce = steeringForce.normalized * Mathf.Clamp(steeringForce.magnitude, 0, vehicle.MaxForce);
             //Debug.DrawLine(vehicle.Position, desiredVelocity, Color.green);
 
             return steeringForce;

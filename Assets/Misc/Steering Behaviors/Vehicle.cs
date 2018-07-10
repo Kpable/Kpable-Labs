@@ -79,9 +79,14 @@ namespace Kpable.AI.Steering
 
         public void Arrive(Transform target)
         {
-            steering.arrive = true;
             targetTransform = target;
-            
+            steering.arrive = true;
+        }
+
+        public void Flee(Transform target)
+        {
+            targetTransform = target;
+            steering.flee = true;
         }
     }
 }

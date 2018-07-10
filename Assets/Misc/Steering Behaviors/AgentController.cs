@@ -17,12 +17,23 @@ namespace Kpable.AI.Steering {
                 var v = go.GetComponent<Vehicle>();
                 //v.Seek(targets.GetChild(i));
                 v.Arrive(targets.GetChild(i));
+                v.Flee(targets.GetChild(i));
+
+
             }
         }
 
         // Update is called once per frame
         void Update() {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
+            if (Physics.Raycast(ray, out hit))
+            {
+                Debug.Log(hit.point);
+
+                // Do something with the object that was hit by the raycast.
+            }
         }
     }
 }
