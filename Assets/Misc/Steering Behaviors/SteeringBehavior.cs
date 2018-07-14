@@ -4,10 +4,49 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Kpable.AI.Steering
-{   
+{   public enum BehaviorType
+    {
+        Seek,
+        Flee,
+        Arrive,
+        Pursuit,
+        Evade,
+        Wander
+    }
+
+    [System.Serializable]
+    public class Behavior
+    {
+        public BehaviorType behaviorType;
+        public Transform target;
+        public Vehicle targetVehicle;
+        public float weight = 1;
+
+        public Behavior(BehaviorType behaviorType, Transform target)
+        {
+            this.behaviorType = behaviorType;
+            this.target = target;
+        }
+
+        public Behavior(BehaviorType behaviorType, Vehicle target)
+        {
+            this.behaviorType = behaviorType;
+            this.targetVehicle = target;
+        }
+
+        public Behavior(BehaviorType behaviorType, Transform target, float weight)
+        {
+            this.behaviorType = behaviorType;
+            this.target = target;
+            this.weight = weight;
+        }
+
+    }
+
     [System.Serializable]
     public class SteeringBehavior
     {
+        public List<Behavior> behaviors = new List<Behavior>();
         // Behavior settings
         public bool seek;
         public bool flee;
@@ -15,11 +54,13 @@ namespace Kpable.AI.Steering
         public bool pursuit;
         public bool evade;
         public bool wander;
-        public float decelerationModifier = 0.2f;
+        public float deceleration = 0.2f;
         public float arrivalSlowRadius = 10f;
         public float arrivalStopRadius = 0.001f;
-        public float fleeRadius = 5f; 
-
+        public float fleeRadius = 5f;
+        public float evadeThreatRange = 10f;
+        float wanderRadius = 1.5f;
+        float wanderDistance = 2f;
 
         Vehicle vehicle;
 
@@ -35,15 +76,52 @@ namespace Kpable.AI.Steering
         {
             Vector3 totalForce = Vector3.zero;
 
-            if(seek) totalForce += Seek(vehicle.target);
-            if(arrive) totalForce += Arrive(vehicle.target, Deceleration.Slow);
-            if(flee) totalForce += Flee(vehicle.target) * 2;
-            if(pursuit) totalForce += Pursuit(vehicle.targetVehicle);
-            if(evade) totalForce += Evade(vehicle.targetVehicle);
-            if(wander) totalForce += Wander();
+            //if(seek) totalForce += Seek(vehicle.target);
+            ////if(arrive) totalForce += Arrive(vehicle.target, Deceleration.Slow);
+            //if(flee) totalForce += Flee(vehicle.target);
+            //if(pursuit) totalForce += Pursuit(vehicle.targetVehicle);
+            //if(evade) totalForce += Evade(vehicle.targetVehicle);
+            //if(wander) totalForce += Wander();
 
+            foreach(var b in behaviors)
+            {
+                totalForce += ProcessBehavior(b);
+            }
 
             return totalForce;
+        }
+
+        Vector3 ProcessBehavior(Behavior behavior)
+        {
+            Vector3 steeringForce = Vector3.zero;
+
+            switch (behavior.behaviorType)
+            {
+                case BehaviorType.Seek:
+                    steeringForce = Seek(behavior.target.position);
+                    break;
+                case BehaviorType.Flee:
+                    steeringForce = Flee(behavior.target.position);
+                    break;
+                case BehaviorType.Arrive:
+                    steeringForce = Arrive(behavior.target.position);
+                    break;
+                case BehaviorType.Pursuit:
+                    //steeringForce = Pursuit(behavior.target.position);
+                    break;
+                case BehaviorType.Evade:
+                    steeringForce = Evade(behavior.targetVehicle);
+                    break;
+                case BehaviorType.Wander:
+                    steeringForce = Wander();
+                    break;
+                default:
+                    break;
+            }
+
+            steeringForce *= behavior.weight;
+
+            return steeringForce;
         }
 
         /// <summary>
@@ -66,15 +144,15 @@ namespace Kpable.AI.Steering
 
         Vector3 Flee(Vector3 targetPosition)
         {
-            // DEBUG
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            // DEBUG Track Mouse
+            //RaycastHit hit;
+            //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out hit))
-            {
-                targetPosition.x = hit.point.x;
-                targetPosition.z = hit.point.z;
-            }
+            //if (Physics.Raycast(ray, out hit))
+            //{
+            //    targetPosition.x = hit.point.x;
+            //    targetPosition.z = hit.point.z;
+            //}
             // END DEBUG
             Vector3 distanceToTarget = vehicle.Position - targetPosition;
             float distance = distanceToTarget.magnitude;
@@ -84,7 +162,7 @@ namespace Kpable.AI.Steering
                 return Vector3.zero;
             }
             // else, run
-            Vector3 desiredVelocity =  desiredVelocity = distanceToTarget.normalized * vehicle.MaxSpeed;
+            Vector3 desiredVelocity = distanceToTarget.normalized * vehicle.MaxSpeed;
             Vector3 steeringForce = desiredVelocity - vehicle.Velocity;
             steeringForce = steeringForce.normalized * Mathf.Clamp(steeringForce.magnitude, 0, vehicle.MaxForce);
             //Debug.DrawLine(vehicle.Position, desiredVelocity, Color.green);
@@ -92,7 +170,7 @@ namespace Kpable.AI.Steering
             return steeringForce;
         }
 
-        Vector3 Arrive(Vector3 targetPosition, Deceleration deceleration)
+        Vector3 Arrive(Vector3 targetPosition)
         {
             Vector3 distanceToTarget = targetPosition - vehicle.Position;
             
@@ -156,8 +234,9 @@ namespace Kpable.AI.Steering
         {
             Vector3 toPursuer = pursuer.Position - vehicle.Position;
 
-            float threatRange = 100f;
-            if (toPursuer.sqrMagnitude > threatRange * threatRange) return Vector3.zero;
+            if(toPursuer.sqrMagnitude > evadeThreatRange * evadeThreatRange)
+                return Vector3.zero;
+
 
             float lookAheadTime = toPursuer.magnitude / (vehicle.MaxSpeed * pursuer.Speed);
 
@@ -167,18 +246,21 @@ namespace Kpable.AI.Steering
         Vector3 Wander()
         {
             Vector3 wanderTarget = Vector3.zero;
-            float wanderRadius = 10f;
-            float wanderDistance = 5f;
 
-            wanderTarget += new Vector3(Random.Range(0, 1), Random.Range(0, 1), Random.Range(0, 1));
+            Vector3 randomVector = new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+            wanderTarget += randomVector;
 
             wanderTarget.Normalize();
 
             wanderTarget *= wanderRadius;
 
             Vector3 target = wanderTarget + new Vector3(wanderDistance, 0, 0);
+            Debug.Log("wander target: " + target);
 
-            return target - vehicle.Position;
+            Vector3 steeringForce = target - vehicle.Position;
+            steeringForce = steeringForce.normalized * Mathf.Clamp(steeringForce.magnitude, 0, vehicle.MaxForce);
+
+            return steeringForce;
         }
 
         Vector3 ObstacleAvoidance( GameObject[] obstacles)
