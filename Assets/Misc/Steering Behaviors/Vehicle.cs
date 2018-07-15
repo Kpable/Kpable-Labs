@@ -14,6 +14,10 @@ namespace Kpable.AI.Steering
         [SerializeField]
         Behavior[] behaviors;
 
+        public float wDist = 8f;
+        public float wJitt = 40f;
+        public float wRad = 5f;
+
         public List<Behavior> Behaviors { get { return steering.behaviors; } }
 
         protected override void Awake()
@@ -22,6 +26,15 @@ namespace Kpable.AI.Steering
             steering = new SteeringBehavior(this);
 
 
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (steering != null)
+            {
+                Gizmos.DrawWireSphere(Position + Vector3.right * steering.wanderDistance, steering.wanderRadius);
+                Gizmos.DrawWireSphere(Position + Vector3.right * steering.wanderDistance + steering.wanderRand, 1);
+            }
         }
         // Use this for initialization
         void Start()
@@ -49,7 +62,9 @@ namespace Kpable.AI.Steering
         // Update is called once per frame
         void FixedUpdate()
         {
-            
+            steering.wanderDistance = wDist;
+            steering.wanderJitter = wJitt;
+            steering.wanderRadius = wRad;
             //target = targetTransform.position;
 
             // Calculate the combined force from each active behavior
@@ -62,10 +77,11 @@ namespace Kpable.AI.Steering
 
             // Update Velocity
             rb.velocity += acceleration;
+            Debug.DrawLine(transform.position, transform.position + rb.velocity);
 
             //transform.Rotate(Velocity.normalized);
             // Do not exeed max velocity
-            //Velocity = Velocity.normalized * Mathf.Clamp(Velocity.magnitude, Velocity.magnitude, maxSpeed);
+            Velocity = Velocity.normalized * Mathf.Clamp(Velocity.magnitude, Velocity.magnitude, maxSpeed);
 
             // Update the position 
             //position += velocity * Time.deltaTime;
@@ -76,7 +92,7 @@ namespace Kpable.AI.Steering
             //    heading = Velocity.normalized;
             //    //sideComponent = heading.perpendicular;
             //}
-            
+
             //transform.position = Position;
             //transform.LookAt(heading);
             //transform.rotation = Quaternion.Euler(heading);

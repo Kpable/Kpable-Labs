@@ -59,9 +59,11 @@ namespace Kpable.AI.Steering
         public float arrivalStopRadius = 0.001f;
         public float fleeRadius = 5f;
         public float evadeThreatRange = 10f;
-        float wanderRadius = 1.5f;
-        float wanderDistance = 2f;
-
+        public Vector3 wanderTarget;
+        public float wanderRadius = 5f;
+        public float wanderDistance = 8f;
+        public float wanderJitter = 2f;
+        public Vector3 wanderRand;
         Vehicle vehicle;
 
         enum Deceleration { None, Fast, Normal, Slow }
@@ -71,6 +73,8 @@ namespace Kpable.AI.Steering
         {
             vehicle = agent;
         }
+
+        
 
         internal Vector3 Calulate()
         {
@@ -245,20 +249,34 @@ namespace Kpable.AI.Steering
 
         Vector3 Wander()
         {
-            Vector3 wanderTarget = Vector3.zero;
+            
 
-            Vector3 randomVector = new Vector3(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f));
+            Vector3 randomVector = new Vector3(Random.Range(-1f, 1f) * wanderJitter,0, Random.Range(-1f, 1f));
             wanderTarget += randomVector;
 
             wanderTarget.Normalize();
 
+            //Debug.DrawLine(vehicle.Position, wanderTarget, Color.blue);
+
             wanderTarget *= wanderRadius;
+            wanderRand = wanderTarget;
+
+            //Debug.DrawLine(vehicle.Position, wanderTarget, Color.green);
 
             Vector3 target = wanderTarget + new Vector3(wanderDistance, 0, 0);
             Debug.Log("wander target: " + target);
+            target += vehicle.Position;
+            Debug.Log("tranform space: " + vehicle.transform.InverseTransformVector(target));
+            target = vehicle.transform.InverseTransformVector(target);
+            //Debug.DrawLine(vehicle.Position, target, Color.red);
+            //Debug.DrawLine(vehicle.Position, vehicle.transform.InverseTransformVector(target), Color.magenta);
 
             Vector3 steeringForce = target - vehicle.Position;
             steeringForce = steeringForce.normalized * Mathf.Clamp(steeringForce.magnitude, 0, vehicle.MaxForce);
+
+            Debug.DrawLine(vehicle.Position, vehicle.Position + steeringForce, Color.black);
+
+            Debug.Log("steering force: " + steeringForce);
 
             return steeringForce;
         }
