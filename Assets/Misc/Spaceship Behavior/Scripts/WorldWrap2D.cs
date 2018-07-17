@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Kpable.Mechanics
 {
-    public class WorldWrap : MonoBehaviour
+    public class WorldWrap2D : MonoBehaviour
     {
 
         public Rect worldBounds = new Rect(-40, -40, 80, 80);

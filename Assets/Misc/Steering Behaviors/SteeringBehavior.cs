@@ -264,9 +264,9 @@ namespace Kpable.AI.Steering
             //Debug.DrawLine(vehicle.Position, wanderTarget, Color.green);
 
             Vector3 target = wanderTarget + new Vector3(wanderDistance, 0, 0);
-            Debug.Log("wander target: " + target);
+            //Debug.Log("wander target: " + target);
             target += vehicle.Position;
-            Debug.Log("tranform space: " + vehicle.transform.InverseTransformVector(target));
+            //Debug.Log("tranform space: " + vehicle.transform.InverseTransformVector(target));
             target = vehicle.transform.InverseTransformVector(target);
             //Debug.DrawLine(vehicle.Position, target, Color.red);
             //Debug.DrawLine(vehicle.Position, vehicle.transform.InverseTransformVector(target), Color.magenta);
@@ -276,7 +276,7 @@ namespace Kpable.AI.Steering
 
             Debug.DrawLine(vehicle.Position, vehicle.Position + steeringForce, Color.black);
 
-            Debug.Log("steering force: " + steeringForce);
+            //Debug.Log("steering force: " + steeringForce);
 
             return steeringForce;
         }

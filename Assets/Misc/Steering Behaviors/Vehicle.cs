@@ -15,7 +15,7 @@ namespace Kpable.AI.Steering
         Behavior[] behaviors;
 
         public float wDist = 8f;
-        public float wJitt = 40f;
+        public float wJitt = 2f;
         public float wRad = 5f;
 
         public List<Behavior> Behaviors { get { return steering.behaviors; } }
