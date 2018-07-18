@@ -17,6 +17,7 @@ namespace Kpable.AI.Steering
         [SerializeField]
         protected float maxForce;
         protected float maxTurnRate;
+        protected new Collider collider;
 
         //public Vector3 Position { get { return position; } set { position = value; } }
         public Vector3 Position { get { return transform.position; } set { transform.position = value; } }
@@ -28,7 +29,7 @@ namespace Kpable.AI.Steering
         public float MaxSpeed { get { return maxSpeed; } set { maxSpeed = value; } }
         public float MaxForce { get { return maxForce; } set { maxForce = value; } }
         public float MaxTurnRate { get { return maxTurnRate; } set { maxTurnRate = value; } }
-
+        public Bounds Bounds { get { if (collider == null) collider = GetComponent<Collider>(); return collider.bounds; } }
 
         protected virtual void Awake()
         {

@@ -24,17 +24,18 @@ namespace Kpable.AI.Steering
         {
             base.Awake();
             steering = new SteeringBehavior(this);
-
-
         }
 
         private void OnDrawGizmos()
         {
-            if (steering != null)
-            {
-                Gizmos.DrawWireSphere(Position + Vector3.right * steering.wanderDistance, steering.wanderRadius);
-                Gizmos.DrawWireSphere(Position + Vector3.right * steering.wanderDistance + steering.wanderRand, 1);
-            }
+            // Wander Debug
+            //if (steering != null)
+            //{
+            //    Gizmos.DrawWireSphere(Position + Vector3.right * steering.wanderDistance, steering.wanderRadius);
+            //    Gizmos.DrawWireSphere(Position + Vector3.right * steering.wanderDistance + steering.wanderRand, 1);
+            //}
+
+
         }
         // Use this for initialization
         void Start()
@@ -56,7 +57,6 @@ namespace Kpable.AI.Steering
             //Debug.Log(steering.Map(5, 0, 10, 1, 3)); // 2
             //Debug.Log(steering.Map(20, 0, 40, 1, 5)); // 3
 
-
         }
 
         // Update is called once per frame
@@ -77,7 +77,7 @@ namespace Kpable.AI.Steering
 
             // Update Velocity
             rb.velocity += acceleration;
-            Debug.DrawLine(transform.position, transform.position + rb.velocity);
+            //Debug.DrawLine(transform.position, transform.position + rb.velocity);
 
             //transform.Rotate(Velocity.normalized);
             // Do not exeed max velocity

@@ -11,7 +11,8 @@ namespace Kpable.AI.Steering
         Arrive,
         Pursuit,
         Evade,
-        Wander
+        Wander, 
+        ObstacleAvoidance
     }
 
     [System.Serializable]
@@ -63,6 +64,10 @@ namespace Kpable.AI.Steering
         public float wanderRadius = 5f;
         public float wanderDistance = 8f;
         public float wanderJitter = 2f;
+        public float obstacleAvoidanceDetectionBoxLength = 10f;
+        public float brakingWeight = 0.2f;
+
+        //Debug Param
         public Vector3 wanderRand;
         Vehicle vehicle;
 
@@ -118,6 +123,9 @@ namespace Kpable.AI.Steering
                     break;
                 case BehaviorType.Wander:
                     steeringForce = Wander();
+                    break;
+                case BehaviorType.ObstacleAvoidance:
+                    steeringForce = ObstacleAvoidance();
                     break;
                 default:
                     break;
@@ -274,23 +282,54 @@ namespace Kpable.AI.Steering
             Vector3 steeringForce = target - vehicle.Position;
             steeringForce = steeringForce.normalized * Mathf.Clamp(steeringForce.magnitude, 0, vehicle.MaxForce);
 
-            Debug.DrawLine(vehicle.Position, vehicle.Position + steeringForce, Color.black);
+            //Debug.DrawLine(vehicle.Position, vehicle.Position + steeringForce, Color.black);
 
             //Debug.Log("steering force: " + steeringForce);
 
             return steeringForce;
         }
 
-        Vector3 ObstacleAvoidance( GameObject[] obstacles)
+        Vector3 ObstacleAvoidance()
         {
             //// Define the detection length of the box proportional to the agent's velocity
             //float minBoxlength = 40f;
-            //float boxLength = minBoxlength + (vehicle.Speed / vehicle.MaxSpeed) * minBoxlength;
+            float detectionBoxLength = obstacleAvoidanceDetectionBoxLength + (vehicle.Speed / vehicle.MaxSpeed) * obstacleAvoidanceDetectionBoxLength;
+            Vector3 localPosOfClosestObstacle = Vector3.zero;
+            float distanceToClosest = float.MaxValue;
+            GameObject closestObject = null;
 
             // grab a list of obstacles in that path
-            //Physics.OverlapBox()
+            Collider[] objectsDetected = Physics.OverlapBox(vehicle.Position + new Vector3(detectionBoxLength / 2,0), new Vector3(detectionBoxLength / 2, .5f, .5f));
+            Debug.Log("Obstacles Detected: " + objectsDetected.Length);
+
+            for (int i = 0; i < objectsDetected.Length; i++)
+            {
+                Debug.Log(objectsDetected[i].name + ": " + objectsDetected[i].transform.position);
+
+                float distance = Vector3.Distance(vehicle.Position, objectsDetected[i].transform.position);
+                if(distance < distanceToClosest)
+                {
+                    distanceToClosest = distance;
+                    localPosOfClosestObstacle = objectsDetected[i].transform.position;
+                    closestObject = objectsDetected[i].gameObject;
+                }
+            }
             
-            return Vector3.zero;
+            Debug.DrawLine(vehicle.Position, new Vector3(vehicle.Position.x + detectionBoxLength, vehicle.Position.y, vehicle.Position.z));
+
+            Vector3 steeringForce = Vector3.zero;
+
+            if(closestObject)
+            {
+                float multiplier = 1f + (detectionBoxLength - localPosOfClosestObstacle.x) / detectionBoxLength;
+                Debug.Log("Multiplier: " + multiplier);
+                steeringForce.z = (closestObject.GetComponent<Collider>().bounds.size.z - localPosOfClosestObstacle.y) * multiplier;
+
+                steeringForce.x = (closestObject.GetComponent<Collider>().bounds.size.x - localPosOfClosestObstacle.x) *brakingWeight;
+
+            }
+
+            return steeringForce;
         }
     }
 }
