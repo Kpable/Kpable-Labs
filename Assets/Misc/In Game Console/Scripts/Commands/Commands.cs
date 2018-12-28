@@ -4,14 +4,20 @@ using System.Linq;
 
 namespace Kpable.InGameConsole
 {
-    
+
     public class Commands : ICommands
     {
-        CommandAutocomplete autocomplete;
-        public CommandAutocomplete Autocomplete { get { return autocomplete; } } 
+        public CommandAutocomplete Autocomplete { get; set; }
 
-        Dictionary<string, Command> commands;
+        Dictionary<string, Command> commands = new Dictionary<string, Command>();
         CommandBuilder commandBuilder;
+
+        public Commands()
+        {
+            
+            commandBuilder = new CommandBuilder();
+            Autocomplete = new CommandAutocomplete();
+        }
 
         public Dictionary<string, Command> CommandsSet { get { return commands; } }
 
@@ -46,22 +52,22 @@ namespace Kpable.InGameConsole
             throw new System.NotImplementedException();
         }
 
-        public int Register(string alias, params string[] arguments)
+        public bool Register(string alias, Dictionary<string, object> arguments)
         {
             if (CommandsSet.ContainsKey(alias))
             {
                 Console.Instance.Log.Warn("Failed to register [b]" + alias + "[/b]. Command already exists.");
-                return 1;
+                return false;
             }
 
             Command command = CommandBuilder.Build(alias, arguments);
-            if (command)
+            if (command != null)
             {                
                 CommandsSet.Add(alias, command);
-                return 0;
+                return true;
             }
 
-            return 0;
+            return true;
         }
     }
 }

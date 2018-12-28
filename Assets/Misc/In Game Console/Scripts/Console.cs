@@ -14,33 +14,22 @@ namespace Kpable.InGameConsole
 
         bool IsConsoleShown = false;
 
-        History history;
         Log log;
         RegExLib regEx;
         Commands commands;
 
         //Regex eraseTrash = new Regex("\\[[\\/]?[a-z\\=\\#0-9\\ \\_\\-]+\\]");
-        Regex eraseTrash = new Regex("\\[[\\/]?[a-z\\=\\#0-9\\ \\_\\-]+\\]");
+        //Regex eraseTrash = new Regex("\\[[\\/]?[a-z\\=\\#0-9\\ \\_\\-]+\\]");
 
-        public Commands Commands { get { return commands; } }
-        public Log Log { get { return log; } }
-        
-        public BaseCommands BaseCommands
+        public Commands Commands { get { return commands; } set { commands = value; } }
+        public Log Log { get { return log; } set { log = value; } }
+        public BaseCommands BaseCommands { get; set; }
+        public RegExLib RegEx { get { return regEx; } set { regEx = value; } }
+        public History History { get; set; }
+
+        public bool Register(string alias, Dictionary<string, object> arguments)
         {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-
-            set
-            {
-                throw new System.NotImplementedException();
-            }
-        }
-
-        public int Register(string alias, Dictionary<string, object> arguments)
-        {
-            throw new System.NotImplementedException();           
+            return Commands.Register(alias, arguments);      
         }
 
         public void ToggleConsole()
@@ -50,18 +39,23 @@ namespace Kpable.InGameConsole
 
         public void Write(string message)
         {
-            throw new System.NotImplementedException();
+            textBox.text += message;
         }
 
         public void WriteLine(string message = "")
         {
-            throw new System.NotImplementedException();
+            textBox.text += message + "\n";
         }
 
         // Use this for initialization
         void Start()
         {
-           
+            Commands = new Commands();
+            Log = new Log();
+            RegEx = new RegExLib();
+            History = new History();
+            BaseCommands = new BaseCommands();
+            
         }
 
         // Update is called once per frame
@@ -71,15 +65,31 @@ namespace Kpable.InGameConsole
         }
 
 
-        void HandleEnteredCommand(string command)
+        public void HandleEnteredCommand(string command)
         {
-            history.Reset();
-            commands.Autocomplete.Reset();
-            command = eraseTrash.Replace(command, "");
+            History.Reset();
+            Commands.Autocomplete.Reset();
+            //command = eraseTrash.Replace(command, "");
 
             string cmdName = command.Split(new string[] { " " }, System.StringSplitOptions.RemoveEmptyEntries)[0];
 
             Command Command = Commands.Get(cmdName);
+            if (Command == null)
+            {
+                Log.Warn("No such command");
+                return;
+            }
+
+            string cmdArgs = "";
+            if(Command.RequireArgs())
+            {
+
+            }
+
+            History.Push(Command.Alias + " " + cmdArgs);
+            WriteLine("<#00ff00>$</color> " + Command.Alias + " " + cmdArgs);
+            Command.Run(cmdArgs.Split(' '));
+            inputBox.text = "";
 
         }
 

@@ -7,23 +7,29 @@ namespace Kpable.InGameConsole
 {
     public class CommandBuilder
     {
-
-        public static Command Build(string alias, params string[] arguments)
+        public static Command Build(string alias, Dictionary<string, object> arguments)
         {
-            Dictionary<string, object> args = arguments.ToDictionary(k => k, v => (object)v);
+            Callback cb = null;
+            Argument[] args = null;
+            string description = "";
 
-            if (!args.ContainsKey("target") && args["target"] != null)
+            if(arguments.ContainsKey("description"))
             {
-                Console.Instance.Log.Error("Failed to register [b]" + alias + "[/b]. Missing [b]target[/b] parameter");
-                return null;
+                description = (string)arguments["description"];
             }
 
-            if(args.ContainsKey("args"))
+            if (!arguments.ContainsKey("target"))
             {
-                ArgumentBuilder.BuildAll(args["args"]);
+                Console.Instance.Log.Error("Failed to register <b>" + alias + "</b>. Missing <b>target</b> parameter");
+                //return null;
             }
 
-            return null;
+            if(arguments.ContainsKey("args"))
+            {
+                args = ArgumentBuilder.BuildAll(arguments["args"]);
+            }
+
+            return new Command(alias, cb, args, description);
         }
     }
 }

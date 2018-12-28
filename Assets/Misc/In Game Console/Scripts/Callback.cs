@@ -1,12 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public class Callback
+namespace Kpable.InGameConsole
 {
-    void Initialize()
+    public class Callback
     {
+        public Callback()
+        {
+            Initialize();
+        }
 
+        void Initialize()
+        {
+
+        }
+
+        public void Call(List<Argument> args)
+        {
+
+        }
     }
-
-
 }

@@ -8,7 +8,7 @@ namespace Kpable.InGameConsole
     public class CommandAutocomplete
     {
         string filter = null;
-        List<string> filtered;
+        List<string> filtered = new List<string>();
         int current = -1;
 
         public string Filter(string filter)

@@ -1,16 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class StringType : MonoBehaviour {
+namespace Kpable.InGameConsole
+{
+    public class StringType : BaseType
+    {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+        string Value { get; set; } 
+
+        public StringType()
+        {
+            Type = TypeCode.String;
+        }
+
+        public override bool Check(string value)
+        {
+            Value = value;
+            return true;
+        }
+
+        public override object Get()
+        {
+            return Value;
+        }
+
+    }
 }

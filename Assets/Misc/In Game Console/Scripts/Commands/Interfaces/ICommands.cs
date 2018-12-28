@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 namespace Kpable.InGameConsole
 {
     public interface ICommands
     {
-        int Register(string alias, params string[] arguments);
+        bool Register(string alias, Dictionary<string, object> arguments);
         void Deregister(string alias);
         void PrintAll();
         Command Get(string alias);

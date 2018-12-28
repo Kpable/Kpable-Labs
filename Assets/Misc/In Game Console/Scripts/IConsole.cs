@@ -7,10 +7,9 @@ namespace Kpable.InGameConsole
 
     public interface IConsole
     {
-        BaseCommands BaseCommands { get; set; }
         
 
-        int Register(string alias, Dictionary<string, object> arguments);
+        bool Register(string alias, Dictionary<string, object> arguments);
         void Write(string message);
         void WriteLine(string message = "");
         void ToggleConsole();

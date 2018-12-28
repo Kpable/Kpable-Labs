@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ICommand : MonoBehaviour {
+namespace Kpable.InGameConsole
+{
+    public interface ICommand
+    {        
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+        bool Run(string[] args);
+        void Describe();
+        bool RequireArgs();
+        bool RequireStrings();
+    }
 }

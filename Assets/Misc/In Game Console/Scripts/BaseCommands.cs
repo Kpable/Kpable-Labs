@@ -20,7 +20,7 @@ namespace Kpable.InGameConsole
                 ("echo", new Dictionary<string, object>()
                 {
                     { "description" , "Prints a string in console" },
-                    { "args", typeof(string) },
+                    { "args", new object[] { TypeCode.String } },
                     { "target", ValueTuple.Create(Console.Instance, "WriteLine")}
                 });
 
@@ -28,7 +28,7 @@ namespace Kpable.InGameConsole
                 ("history", new Dictionary<string, object>()
                 {
                     { "description" , "Prints a string in console" },
-                    { "args", typeof(string) },
+                    { "args", new object[] { TypeCode.String } },
                     { "target", ValueTuple.Create(Console.Instance, "WriteLine")}
                 });
 
@@ -36,7 +36,7 @@ namespace Kpable.InGameConsole
                 ("commands", new Dictionary<string, object>()
                 {
                     { "description" , "Prints a string in console" },
-                    { "args", typeof(string) },
+                    { "args", new object[] { TypeCode.String } },
                     { "target", ValueTuple.Create(Console.Instance, "WriteLine")}
                 });
 
@@ -44,7 +44,7 @@ namespace Kpable.InGameConsole
                 ("help", new Dictionary<string, object>()
                 {
                     { "description" , "Prints a string in console" },
-                    { "args", typeof(string) },
+                    { "args", new object[] { TypeCode.String } },
                     { "target", ValueTuple.Create(Console.Instance, "WriteLine")}
                 });
 
@@ -52,7 +52,7 @@ namespace Kpable.InGameConsole
                 ("quit", new Dictionary<string, object>()
                 {
                     { "description" , "Exits application" },
-                    { "args", typeof(string) },
+                    { "args", new object[] { "text", TypeCode.String } },
                     { "target", ValueTuple.Create(Console.Instance, "WriteLine")}
                 });
 
@@ -60,7 +60,7 @@ namespace Kpable.InGameConsole
                 ("clear", new Dictionary<string, object>()
                 {
                     { "description" , "Prints a string in console" },
-                    { "args", typeof(string) },
+                    { "args", new object[] { TypeCode.String } },
                     { "target", ValueTuple.Create(Console.Instance, "WriteLine")}
                 });
 
@@ -68,7 +68,7 @@ namespace Kpable.InGameConsole
                 ("version", new Dictionary<string, object>()
                 {
                     { "description" , "Prints a string in console" },
-                    { "args", typeof(string) },
+                    { "args", new object[] { TypeCode.String } },
                     { "target", ValueTuple.Create(Console.Instance, "WriteLine")}
                 });
             
