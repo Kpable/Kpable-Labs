@@ -17,6 +17,8 @@ namespace Kpable.InGameConsole
                     return new IntType();
                 case TypeCode.Decimal:
                     return new FloatType();
+                case TypeCode.String:
+                    return new StringType();
 
                 case TypeCode.Byte:
                 case TypeCode.Char:
@@ -29,7 +31,6 @@ namespace Kpable.InGameConsole
                 case TypeCode.Object:
                 case TypeCode.SByte:
                 case TypeCode.Single:
-                case TypeCode.String:
                 case TypeCode.UInt16:
                 case TypeCode.UInt32:
                 case TypeCode.UInt64:

@@ -14,9 +14,9 @@ namespace Kpable.InGameConsole
             ArgType = argType;
         }
 
-        public void GetValue()
+        public object GetValue()
         {
-            throw new System.NotImplementedException();
+            return ArgType.Get();
         }
 
         public bool SetValue(string value)

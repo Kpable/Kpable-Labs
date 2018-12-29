@@ -5,5 +5,5 @@ using UnityEngine;
 public interface IArgument {
 
     bool SetValue(string value);
-    void GetValue();
+    object GetValue();
 }

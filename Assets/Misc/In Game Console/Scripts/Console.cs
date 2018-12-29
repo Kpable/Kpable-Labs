@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Kpable.Utilities;
 using System.Text.RegularExpressions;
-
+using System.Linq;
 namespace Kpable.InGameConsole
 {
     public class Console : SingletonBase<Console>, IConsole
@@ -27,7 +27,7 @@ namespace Kpable.InGameConsole
         public RegExLib RegEx { get { return regEx; } set { regEx = value; } }
         public History History { get; set; }
 
-        public bool Register(string alias, Dictionary<string, object> arguments)
+        public bool Register(string alias, Dictionary<string, object[]> arguments)
         {
             return Commands.Register(alias, arguments);      
         }
@@ -70,8 +70,8 @@ namespace Kpable.InGameConsole
             History.Reset();
             Commands.Autocomplete.Reset();
             //command = eraseTrash.Replace(command, "");
-
-            string cmdName = command.Split(new string[] { " " }, System.StringSplitOptions.RemoveEmptyEntries)[0];
+            string[] cmdsplit = command.Split(new string[] { " " }, System.StringSplitOptions.RemoveEmptyEntries);
+            string cmdName = cmdsplit[0];
 
             Command Command = Commands.Get(cmdName);
             if (Command == null)
@@ -83,7 +83,7 @@ namespace Kpable.InGameConsole
             string cmdArgs = "";
             if(Command.RequireArgs())
             {
-
+                cmdArgs = string.Join(" ", cmdsplit.Skip(1).ToArray());                
             }
 
             History.Push(Command.Alias + " " + cmdArgs);

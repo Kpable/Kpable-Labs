@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
+using System.Reflection;
+
 
 namespace Kpable.InGameConsole
 {
     public class CommandBuilder
     {
-        public static Command Build(string alias, Dictionary<string, object> arguments)
+        public static Command Build(string alias, Dictionary<string, object[]> arguments)
         {
             Callback cb = null;
             Argument[] args = null;
@@ -15,7 +18,7 @@ namespace Kpable.InGameConsole
 
             if(arguments.ContainsKey("description"))
             {
-                description = (string)arguments["description"];
+                description = (string)arguments["description"][0];
             }
 
             if (!arguments.ContainsKey("target"))
@@ -23,8 +26,14 @@ namespace Kpable.InGameConsole
                 Console.Instance.Log.Error("Failed to register <b>" + alias + "</b>. Missing <b>target</b> parameter");
                 //return null;
             }
+            else
+            {
+                cb = new Callback(arguments["target"]);
+                //MethodInfo mi = (MethodInfo)arguments["target"];
+                //cb = new Callback(mi);
+            }
 
-            if(arguments.ContainsKey("args"))
+            if (arguments.ContainsKey("args"))
             {
                 args = ArgumentBuilder.BuildAll(arguments["args"]);
             }

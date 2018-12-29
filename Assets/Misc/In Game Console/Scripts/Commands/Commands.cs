@@ -52,7 +52,7 @@ namespace Kpable.InGameConsole
             throw new System.NotImplementedException();
         }
 
-        public bool Register(string alias, Dictionary<string, object> arguments)
+        public bool Register(string alias, Dictionary<string, object[]> arguments)
         {
             if (CommandsSet.ContainsKey(alias))
             {

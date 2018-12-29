@@ -27,7 +27,7 @@ namespace Kpable.InGameConsole
             if (args.Length > 1)            
                 builtArgs.Add(Build(args[0].ToString(), (TypeCode)args[1]));            
             else
-                builtArgs.Add(Build(args[0].ToString()));
+                builtArgs.Add(Build(args[0].ToString(), (TypeCode)args[0]));
 
 
 

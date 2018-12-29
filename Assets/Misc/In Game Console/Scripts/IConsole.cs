@@ -9,7 +9,7 @@ namespace Kpable.InGameConsole
     {
         
 
-        bool Register(string alias, Dictionary<string, object> arguments);
+        bool Register(string alias, Dictionary<string, object[]> arguments);
         void Write(string message);
         void WriteLine(string message = "");
         void ToggleConsole();
