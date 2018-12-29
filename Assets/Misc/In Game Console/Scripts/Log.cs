@@ -15,7 +15,7 @@ namespace Kpable.InGameConsole
 
         public void SetLogLevel(LogType level = LogType.Info)
         {
-
+            logLevel = level;
         }
 
         public void Info(string message)
@@ -23,7 +23,7 @@ namespace Kpable.InGameConsole
             if (logLevel <= LogType.Info)
             {
                 // blue
-                Console.Instance.WriteLine(message);
+                Console.Instance.WriteLine("<#d1ecf1>[INFO]</color> " + message);
             }
         }
 
@@ -32,7 +32,7 @@ namespace Kpable.InGameConsole
             if (logLevel <= LogType.Warning)
             {
                 // yellow
-                Console.Instance.WriteLine(message);
+                Console.Instance.WriteLine("<#fff3cd>[WARNING]</color> " +  message);
             }
         }
 
@@ -41,7 +41,7 @@ namespace Kpable.InGameConsole
             if (logLevel <= LogType.Error)
             {
                 // red
-                Console.Instance.WriteLine(message);
+                Console.Instance.WriteLine("<#721c24>[ERROR]</color> " + message);
             }
         }
     }

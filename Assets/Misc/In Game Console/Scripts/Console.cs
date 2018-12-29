@@ -1,16 +1,19 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Kpable.Utilities;
 using System.Text.RegularExpressions;
 using System.Linq;
+
 namespace Kpable.InGameConsole
 {
     public class Console : SingletonBase<Console>, IConsole
     {
-        public TextMeshProUGUI textBox;
+        public TMP_Text textBox;
         public TMP_InputField inputBox;
+        public Scrollbar scrollbar;
 
         bool IsConsoleShown = false;
 
@@ -70,6 +73,8 @@ namespace Kpable.InGameConsole
             History.Reset();
             Commands.Autocomplete.Reset();
             //command = eraseTrash.Replace(command, "");
+            if (string.IsNullOrEmpty(command) || string.IsNullOrWhiteSpace(command)) return;
+
             string[] cmdsplit = command.Split(new string[] { " " }, System.StringSplitOptions.RemoveEmptyEntries);
             string cmdName = cmdsplit[0];
 
@@ -77,22 +82,32 @@ namespace Kpable.InGameConsole
             if (Command == null)
             {
                 Log.Warn("No such command");
+                ClearInput();
                 return;
             }
 
-            string cmdArgs = "";
-            if(Command.RequireArgs())
+            string cmdArgs = string.Join(" ", cmdsplit.Skip(1).ToArray());
+            if (Command.RequireArgs())
             {
-                cmdArgs = string.Join(" ", cmdsplit.Skip(1).ToArray());                
+                if (cmdArgs.Length != Command.RequiredArgumentsCount && Command.RequireStrings())
+                {
+
+                }
             }
 
             History.Push(Command.Alias + " " + cmdArgs);
             WriteLine("<#00ff00>$</color> " + Command.Alias + " " + cmdArgs);
             Command.Run(cmdArgs.Split(' '));
-            inputBox.text = "";
 
+            ClearInput();
         }
 
+        private void ClearInput()
+        {
+            inputBox.text = string.Empty;
+            inputBox.ActivateInputField();
+            scrollbar.value = 0;
+        }
     }
 }
 

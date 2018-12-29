@@ -26,7 +26,14 @@ namespace Kpable.InGameConsole
 
         public override string ToString()
         {
-            return base.ToString();
+            string output = "";
+
+            if (!Name.Equals(ArgType.Name))
+                output += Name + ":";
+
+            output += ArgType.Name;
+
+            return output;
         }
     }
 }

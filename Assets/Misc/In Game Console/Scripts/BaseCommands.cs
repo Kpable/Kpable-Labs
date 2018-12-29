@@ -28,59 +28,51 @@ namespace Kpable.InGameConsole
             Console.Instance.Register
                 ("history", new Dictionary<string, object[]>()
                 {
-                    { "description" , new object[] {"Prints a string in console" } },
-                    { "args", new object[] { TypeCode.String } },
-                    //{ "target", ValueTuple.Create(Console.Instance, "WriteLine")}
+                    { "description" , new object[] {"Prints all previous commands used during the session" } },
+                    { "target", new object[] { Console.Instance.History, "PrintAll" } }
                 });
 
             Console.Instance.Register
                 ("commands", new Dictionary<string, object[]>()
                 {
-                    { "description" , new object[] {"Prints a string in console" } },
-                    { "args", new object[] { TypeCode.String } },
-                    //{ "target", ValueTuple.Create(Console.Instance, "WriteLine")}
+                    { "description" , new object[] {"Lists all available commands" } },
+                    { "target", new object[] { Console.Instance.Commands, "PrintAll" } }
                 });
-
-            Action<string> helpact = new Action<string>(Help);
             
             Console.Instance.Register
                 ("help", new Dictionary<string, object[]>()
                 {
-                    { "description" , new object[] { "Prints a string in console" } },
+                    { "description" , new object[] { "Outputs usage instructions" } },
                     { "args", new object[] { TypeCode.String } },
                     { "target", new object[] { this, "Help" } }
-                    //{ "target", helpact.Target }
                 });
 
             Console.Instance.Register
                 ("quit", new Dictionary<string, object[]>()
                 {
                     { "description" , new object[] { "Exits application" } },
-                    { "args", new object[] { "text", TypeCode.String } },
-                    //{ "target", ValueTuple.Create(Console.Instance, "WriteLine")}
+                    { "target", new object[] { this, "Quit" }}
                 });
 
             Console.Instance.Register
                 ("clear", new Dictionary<string, object[]>()
                 {
-                    { "description" , new object[] {"Prints a string in console" } },
-                    { "args", new object[] { TypeCode.String } },
-                    //{ "target", ValueTuple.Create(Console.Instance, "WriteLine")}
+                    { "description" , new object[] {"Clears the console" } },
+                    { "target", new object[] { this, "Clear" }}
                 });
 
             Console.Instance.Register
                 ("version", new Dictionary<string, object[]>()
                 {
-                    { "description" , new object[] {"Prints a string in console" } },
-                    { "args", new object[] { TypeCode.String } },
-                    //{ "target", ValueTuple.Create(Console.Instance, "WriteLine")}
+                    { "description" , new object[] {"Shows the version" } },
+                    { "target", new object[] { this, "Version" }}
                 });
             
         }
 
         public static void Help(string command = null)
         {
-            if (command != null)
+            if (!string.IsNullOrEmpty(command))
             {
                 Command c = Console.Instance.Commands.Get(command);
                 if(c != null)
@@ -97,10 +89,7 @@ namespace Kpable.InGameConsole
             {
                 Console.Instance.WriteLine(
                     "Type <#ffff66><link='id_01'>help</link> <command-name></color> show information about command.");
-            }
-
-
-                
+            }                
         }
 
     }

@@ -13,8 +13,7 @@ namespace Kpable.InGameConsole
         CommandBuilder commandBuilder;
 
         public Commands()
-        {
-            
+        {            
             commandBuilder = new CommandBuilder();
             Autocomplete = new CommandAutocomplete();
         }
@@ -49,7 +48,10 @@ namespace Kpable.InGameConsole
 
         public void PrintAll()
         {
-            throw new System.NotImplementedException();
+            foreach (var c in CommandsSet.Values)
+            {
+                c.Describe();
+            }
         }
 
         public bool Register(string alias, Dictionary<string, object[]> arguments)
@@ -69,5 +71,6 @@ namespace Kpable.InGameConsole
 
             return true;
         }
+
     }
 }

@@ -7,6 +7,8 @@ namespace Kpable.InGameConsole
     public class Command : ICommand
     {
         public string Alias { get; set; }
+        public int RequiredArgumentsCount { get { return (Arguments != null ) ? Arguments.Length : 0; } }
+
         Callback Target { get; set; }
         Argument[] Arguments { get; set; }
         string Description { get; set; }
@@ -24,23 +26,27 @@ namespace Kpable.InGameConsole
 
         public bool Run(string[] args)
         {
-            if(args.Length  != Arguments.Length)
-            {
-                Console.Instance.Log.Warn("Recieved more arguments than command takes");
-            }
-
             List<Argument> arguments = new List<Argument>();
 
-            for (int i = 0; i < Arguments.Length; i++)
+            if (Arguments != null)
             {
-                bool argumentAssigned = Arguments[i].SetValue(args[i]);
-
-                if (argumentAssigned)
-                    arguments.Add(Arguments[i]);
-                else
+                if (args.Length != Arguments.Length)
                 {
-                    Console.Instance.Log.Warn("Argument " + args[i] + ": expected " + Arguments[i].ArgType.Type.ToString());
-                    return false;
+                    Console.Instance.Log.Warn("Recieved more arguments than command takes");
+                }
+
+
+                for (int i = 0; i < Arguments.Length; i++)
+                {
+                    bool argumentAssigned = Arguments[i].SetValue(args[i]);
+
+                    if (argumentAssigned)
+                        arguments.Add(Arguments[i]);
+                    else
+                    {
+                        Console.Instance.Log.Warn("Argument " + args[i] + ": expected " + Arguments[i].ArgType.Type.ToString());
+                        return false;
+                    }
                 }
             }
 
@@ -53,18 +59,36 @@ namespace Kpable.InGameConsole
 
         public void Describe()
         {
-            Console.Instance.Write(Description);
+            Console.Instance.Write("<#ffff66><link='id_01'>" + Alias + "</link></color>");
+
+            if (RequiredArgumentsCount > 0)
+            {
+                foreach (var a in Arguments)
+                {
+                    Console.Instance.Write(" <#88ffff>" + a.ToString() + "</color>");
+                }
+            }
+
+            if(!string.IsNullOrEmpty(Description))
+                Console.Instance.Write(" - " + Description);
+            
             Console.Instance.WriteLine();
         }
 
         public bool RequireArgs()
         {
-            return Arguments.Length > 0;
+            if(Arguments != null) return Arguments.Length > 0;
+            return false;
         }
 
         public bool RequireStrings()
         {
-            throw new System.NotImplementedException();
+            foreach (var a in Arguments)
+            {
+                if (a.ArgType.Type == System.TypeCode.String) return true;
+            }
+
+            return false;
         }
     }
 }

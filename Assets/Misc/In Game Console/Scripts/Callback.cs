@@ -21,6 +21,7 @@ namespace Kpable.InGameConsole
 
         public void Call(List<Argument> args)
         {
+            
             if (args.Count == 1)
                 Method.Invoke(Target, new object[] { args[0].GetValue() });
             else
