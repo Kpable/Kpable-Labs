@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,25 +10,24 @@ using System.Linq;
 
 namespace Kpable.InGameConsole
 {
-    public class Console : SingletonBase<Console>, IConsole
+    public class Console : SingletonBase<Console>, IConsole, IPointerClickHandler
     {
         public TMP_Text textBox;
         public TMP_InputField inputBox;
         public Scrollbar scrollbar;
+        public GameObject container;
 
-        bool IsConsoleShown = false;
-
-        Log log;
-        RegExLib regEx;
-        Commands commands;
+        bool IsConsoleShown = true;
+        string currentHistoryCommand = "";
+        string currentText = "";
 
         //Regex eraseTrash = new Regex("\\[[\\/]?[a-z\\=\\#0-9\\ \\_\\-]+\\]");
         //Regex eraseTrash = new Regex("\\[[\\/]?[a-z\\=\\#0-9\\ \\_\\-]+\\]");
 
-        public Commands Commands { get { return commands; } set { commands = value; } }
-        public Log Log { get { return log; } set { log = value; } }
+        public Commands Commands { get; set; }
+        public Log Log { get; set; }
         public BaseCommands BaseCommands { get; set; }
-        public RegExLib RegEx { get { return regEx; } set { regEx = value; } }
+        public RegExLib RegEx { get; set; }
         public History History { get; set; }
 
         public bool Register(string alias, Dictionary<string, object[]> arguments)
@@ -37,7 +37,21 @@ namespace Kpable.InGameConsole
 
         public void ToggleConsole()
         {
-            throw new System.NotImplementedException();
+            if (!IsConsoleShown)
+            {
+                container.SetActive(true);
+                ClearInput();
+                inputBox.onSubmit.AddListener(HandleEnteredCommand);
+
+            }
+            else
+            {
+                container.SetActive(false);
+                inputBox.onSubmit.RemoveListener(HandleEnteredCommand);
+
+            }
+
+            IsConsoleShown = !IsConsoleShown;
         }
 
         public void Write(string message)
@@ -58,13 +72,60 @@ namespace Kpable.InGameConsole
             RegEx = new RegExLib();
             History = new History();
             BaseCommands = new BaseCommands();
+
+            if (IsConsoleShown)
+                inputBox.onSubmit.AddListener(HandleEnteredCommand);
             
         }
 
         // Update is called once per frame
         void Update()
         {
+            if (Input.GetKeyDown(KeyCode.BackQuote))
+            {
+                ToggleConsole();
+            }
 
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+
+            }
+
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+
+            }
+
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                
+                if (!Commands.Autocomplete.Filtered.Contains(inputBox.text))
+                {
+                    currentText = inputBox.text;
+                    Commands.Autocomplete.Reset();
+                }
+
+                Commands.Autocomplete.Filter(currentText);
+                currentHistoryCommand = Commands.Autocomplete.Next();
+            }
+
+            if (!string.IsNullOrEmpty(currentHistoryCommand))
+            {
+                inputBox.text = currentHistoryCommand;
+                inputBox.stringPosition = currentHistoryCommand.Length + 1;
+                currentHistoryCommand = "";
+            }
+
+            
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            //int linkIndex = TMP_TextUtilities.FindIntersectingLink(textBox, Input.mousePosition, null);
+
+            //TMP_LinkInfo linkInfo = textBox.textInfo.linkInfo[linkIndex];
+
+            //Debug.Log(linkInfo.GetLinkID());
         }
 
 
@@ -108,6 +169,8 @@ namespace Kpable.InGameConsole
             inputBox.ActivateInputField();
             scrollbar.value = 0;
         }
+
+
     }
 }
 

@@ -17,23 +17,27 @@ namespace Kpable.InGameConsole
             Type targetType = Target.GetType();
             string methodName = (string)target[1];
             Method = targetType.GetMethod(methodName);
+            if (Method == null)
+                Console.Instance.Log.Error("Unable to find method '" + methodName + "' in object type " + targetType.ToString());
         }
 
         public void Call(List<Argument> args)
         {
-            
-            if (args.Count == 1)
-                Method.Invoke(Target, new object[] { args[0].GetValue() });
-            else
+            if (Method != null)
             {
-                object[] arguments = new object[args.Count];
-
-                for (int i = 0; i < args.Count; i++)
+                if (args.Count == 1)
+                    Method.Invoke(Target, new object[] { args[0].GetValue() });
+                else
                 {
-                    arguments[i] = args[i].GetValue();
-                }
+                    object[] arguments = new object[args.Count];
 
-                Method.Invoke(Target, arguments);
+                    for (int i = 0; i < args.Count; i++)
+                    {
+                        arguments[i] = args[i].GetValue();
+                    }
+
+                    Method.Invoke(Target, arguments);
+                }
             }
         }
     }

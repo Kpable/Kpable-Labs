@@ -89,7 +89,28 @@ namespace Kpable.InGameConsole
             {
                 Console.Instance.WriteLine(
                     "Type <#ffff66><link='id_01'>help</link> <command-name></color> show information about command.");
+
+                Console.Instance.WriteLine(
+                    "Type <#ffff66><link='id_01'>commands</link> <command-name></color> to get a list of available commands.");
+
+                Console.Instance.WriteLine(
+                    "Type <#ffff66><link='id_01'>quit</link> <command-name></color> to exit the application.");
             }                
+        }
+
+        public static void Quit()
+        {
+            Application.Quit();
+        }
+
+        public static void Clear()
+        {
+            Console.Instance.textBox.text = "";
+        }
+
+        public static void Version()
+        {
+            Console.Instance.WriteLine("Kpable Console v0.0.1");
         }
 
     }
