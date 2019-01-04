@@ -91,10 +91,10 @@ namespace Kpable.InGameConsole
                     "Type <#ffff66><link='id_01'>help</link> <command-name></color> show information about command.");
 
                 Console.Instance.WriteLine(
-                    "Type <#ffff66><link='id_01'>commands</link> <command-name></color> to get a list of available commands.");
+                    "Type <#ffff66><link='id_01'>commands</link></color> to get a list of available commands.");
 
                 Console.Instance.WriteLine(
-                    "Type <#ffff66><link='id_01'>quit</link> <command-name></color> to exit the application.");
+                    "Type <#ffff66><link='id_01'>quit</link></color> to exit the application.");
             }                
         }
 

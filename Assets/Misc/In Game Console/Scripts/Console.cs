@@ -88,17 +88,19 @@ namespace Kpable.InGameConsole
 
             if (Input.GetKeyDown(KeyCode.UpArrow))
             {
-
+                currentHistoryCommand = History.Previous();
+                SetInputAutoText();
             }
 
             if (Input.GetKeyDown(KeyCode.DownArrow))
             {
-
+                currentHistoryCommand = History.Next();
+                SetInputAutoText();
             }
 
             if (Input.GetKeyDown(KeyCode.Tab))
             {
-                
+
                 if (!Commands.Autocomplete.Filtered.Contains(inputBox.text))
                 {
                     currentText = inputBox.text;
@@ -107,16 +109,19 @@ namespace Kpable.InGameConsole
 
                 Commands.Autocomplete.Filter(currentText);
                 currentHistoryCommand = Commands.Autocomplete.Next();
-            }
 
+                SetInputAutoText();
+            }
+        }
+
+        private void SetInputAutoText()
+        {
             if (!string.IsNullOrEmpty(currentHistoryCommand))
             {
                 inputBox.text = currentHistoryCommand;
                 inputBox.stringPosition = currentHistoryCommand.Length + 1;
                 currentHistoryCommand = "";
             }
-
-            
         }
 
         public void OnPointerClick(PointerEventData eventData)
