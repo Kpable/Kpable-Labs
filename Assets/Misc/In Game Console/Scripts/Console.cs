@@ -161,7 +161,7 @@ namespace Kpable.InGameConsole
                 }
             }
 
-            History.Push(Command.Alias + " " + cmdArgs);
+            History.Push(Command.Alias + (string.IsNullOrEmpty(cmdArgs) ? " " : "") + cmdArgs);
             WriteLine("<#00ff00>$</color> " + Command.Alias + " " + cmdArgs);
             Command.Run(cmdArgs.Split(' '));
 
