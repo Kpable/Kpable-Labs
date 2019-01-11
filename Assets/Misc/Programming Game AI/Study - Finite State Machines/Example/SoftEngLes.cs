@@ -110,7 +110,7 @@ public class GoToOfficeAndWork : State<SoftEngLes>
 
     public override void Exit(SoftEngLes owner)
     {
-        owner.Output("Gotta step out and get my head together");
+        owner.Output("Gotta step out and take a break");
     }
 }
 
