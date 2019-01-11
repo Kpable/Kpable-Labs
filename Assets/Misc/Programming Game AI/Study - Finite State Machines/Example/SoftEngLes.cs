@@ -43,12 +43,6 @@ public class SoftEngLes : BaseGameEntity {
     {
         stateMachine = new StateMachine<SoftEngLes>(this);
 
-        // Initialize the states
-        State<SoftEngLes> state = new GoToOfficeAndWork();
-        state = new GoHomeAndRest();
-        state = new LogHours();
-        state = new GetCoffee();
-
         stateMachine.SetCurrentState(GoHomeAndRest.Instance);
         
     }
@@ -71,12 +65,17 @@ public class SoftEngLes : BaseGameEntity {
 
 public class GoToOfficeAndWork : State<SoftEngLes>
 {
-    public static GoToOfficeAndWork Instance; 
-
-    public GoToOfficeAndWork()
+    private static GoToOfficeAndWork instance = null;
+    public static GoToOfficeAndWork Instance
     {
-        if (Instance == null) Instance = this;
-    }
+        get
+        {
+            if (instance == null)
+                instance = new GoToOfficeAndWork();
+
+            return instance;
+        }
+    } 
 
     public override void Enter(SoftEngLes owner)
     {
@@ -117,11 +116,16 @@ public class GoToOfficeAndWork : State<SoftEngLes>
 
 public class GoHomeAndRest : State<SoftEngLes>
 {
-    public static GoHomeAndRest Instance;
-
-    public GoHomeAndRest()
+    private static GoHomeAndRest instance = null;
+    public static GoHomeAndRest Instance
     {
-        if (Instance == null) Instance = this;
+        get
+        {
+            if (instance == null)
+                instance = new GoHomeAndRest();
+
+            return instance;
+        }
     }
 
     public override void Enter(SoftEngLes owner)
@@ -155,12 +159,18 @@ public class GoHomeAndRest : State<SoftEngLes>
 
 public class GetCoffee : State<SoftEngLes>
 {
-    public static GetCoffee Instance;
-
-    public GetCoffee()
+    private static GetCoffee instance = null;
+    public static GetCoffee Instance
     {
-        if (Instance == null) Instance = this;
+        get
+        {
+            if (instance == null)
+                instance = new GetCoffee();
+
+            return instance;
+        }
     }
+
 
     public override void Enter(SoftEngLes owner)
     {
@@ -190,11 +200,16 @@ public class GetCoffee : State<SoftEngLes>
 
 public class LogHours : State<SoftEngLes>
 {
-    public static LogHours Instance;
-
-    public LogHours()
+    private static LogHours instance = null;
+    public static LogHours Instance
     {
-        if (Instance == null) Instance = this;
+        get
+        {
+            if (instance == null)
+                instance = new LogHours();
+
+            return instance;
+        }
     }
 
     public override void Enter(SoftEngLes owner)
