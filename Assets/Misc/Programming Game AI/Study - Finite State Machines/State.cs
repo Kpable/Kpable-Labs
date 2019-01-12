@@ -19,7 +19,9 @@ namespace Kpable.AI.FSM
             get
             {
                 if (instance == null)
+                {
                     instance = new T();
+                }
 
                 return instance;
             }

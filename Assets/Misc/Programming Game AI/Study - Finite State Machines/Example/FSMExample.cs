@@ -3,7 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+using Kpable.AI.FSM;
+
 public enum Entity { Soft_Eng, Pet_Robot }
+public enum MessageType
+{
+    Msg_EkkoImHome,
+    Msg_DevicesPrimed
+}
 
 public class FSMExample : MonoBehaviour {
 
@@ -22,9 +29,12 @@ public class FSMExample : MonoBehaviour {
     void Start () {
         Les = new SoftEngLes((int)Entity.Soft_Eng);
         Les.OutText += WriteToText;
+        // This registration could potentially be moved to the base game entity. 
+        EntityManager.Instance.RegisterEntity(Les);
 
         Ekko = new PetRobotEkko((int)Entity.Pet_Robot);
         Ekko.OutText += WriteToText;
+        EntityManager.Instance.RegisterEntity(Ekko);
 
         StartCoroutine("DayOfWork");
 	}
