@@ -63,20 +63,8 @@ public class SoftEngLes : BaseGameEntity {
     }
 }
 
-public class GoToOfficeAndWork : State<SoftEngLes>
+public class GoToOfficeAndWork : SingletonState<GoToOfficeAndWork, SoftEngLes>
 {
-    private static GoToOfficeAndWork instance = null;
-    public static GoToOfficeAndWork Instance
-    {
-        get
-        {
-            if (instance == null)
-                instance = new GoToOfficeAndWork();
-
-            return instance;
-        }
-    } 
-
     public override void Enter(SoftEngLes owner)
     {
         // If not at work go to work
@@ -114,20 +102,8 @@ public class GoToOfficeAndWork : State<SoftEngLes>
     }
 }
 
-public class GoHomeAndRest : State<SoftEngLes>
+public class GoHomeAndRest : SingletonState<GoHomeAndRest, SoftEngLes>
 {
-    private static GoHomeAndRest instance = null;
-    public static GoHomeAndRest Instance
-    {
-        get
-        {
-            if (instance == null)
-                instance = new GoHomeAndRest();
-
-            return instance;
-        }
-    }
-
     public override void Enter(SoftEngLes owner)
     {
         if (owner.Location != LocationType.Home)
@@ -157,21 +133,8 @@ public class GoHomeAndRest : State<SoftEngLes>
     }
 }
 
-public class GetCoffee : State<SoftEngLes>
+public class GetCoffee : SingletonState<GetCoffee, SoftEngLes>
 {
-    private static GetCoffee instance = null;
-    public static GetCoffee Instance
-    {
-        get
-        {
-            if (instance == null)
-                instance = new GetCoffee();
-
-            return instance;
-        }
-    }
-
-
     public override void Enter(SoftEngLes owner)
     {
         if (owner.Location != LocationType.Wegs)
@@ -198,20 +161,8 @@ public class GetCoffee : State<SoftEngLes>
     }
 }
 
-public class LogHours : State<SoftEngLes>
+public class LogHours : SingletonState<LogHours, SoftEngLes>
 {
-    private static LogHours instance = null;
-    public static LogHours Instance
-    {
-        get
-        {
-            if (instance == null)
-                instance = new LogHours();
-
-            return instance;
-        }
-    }
-
     public override void Enter(SoftEngLes owner)
     {
         if (owner.Location != LocationType.Break_Room)

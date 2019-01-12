@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public enum Entity { Soft_Eng }
+public enum Entity { Soft_Eng, Pet_Robot }
 
 public class FSMExample : MonoBehaviour {
 
     
     Text screen;
     SoftEngLes Les;
+    PetRobotEkko Ekko;
     ScrollRect scrollRect;
     private void Awake()
     {
@@ -21,6 +22,9 @@ public class FSMExample : MonoBehaviour {
     void Start () {
         Les = new SoftEngLes((int)Entity.Soft_Eng);
         Les.OutText += WriteToText;
+
+        Ekko = new PetRobotEkko((int)Entity.Pet_Robot);
+        Ekko.OutText += WriteToText;
 
         StartCoroutine("DayOfWork");
 	}
@@ -39,6 +43,7 @@ public class FSMExample : MonoBehaviour {
     IEnumerator DayOfWork()
     {
         Les.Update();
+        Ekko.Update();
         yield return new WaitForSeconds(1);
         StartCoroutine("DayOfWork");
     }

@@ -22,7 +22,8 @@ namespace Kpable.AI.FSM
 
         public void Update()
         {
-            currentState.Execute(owner);
+            if (GlobalState != null) GlobalState.Execute(owner);
+            if(CurrentState != null) CurrentState.Execute(owner);
         }
 
         public void ChangeState(State<T> newState)
