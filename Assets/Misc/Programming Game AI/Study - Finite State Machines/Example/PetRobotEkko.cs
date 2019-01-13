@@ -90,19 +90,18 @@ public class AmuseOwner : SingletonState<AmuseOwner, PetRobotEkko>
     }
 }
 
-public class PrimeDevices : SingletonState<ComputateLife, PetRobotEkko>
+public class PrimeDevices : SingletonState<PrimeDevices, PetRobotEkko>
 {
     public override void Enter(PetRobotEkko owner)
     {
         owner.Output("Welcome home human companion");
-        MessageDispatcher.Instance.DispatchMessage(owner.ID, owner.ID, (int) MessageType.Msg_DevicesPrimed, 3.5f);
+        MessageDispatcher.Instance.DispatchMessage(owner.ID, owner.ID, (int) MessageType.Msg_DevicesPrimed, 1.5f);
+        owner.Output("I shall prime your devices");
 
     }
 
     public override void Execute(PetRobotEkko owner)
     {
-        owner.Output("I shall prime your devices");
-        owner.GetFSM().RevertToPreviousState();
     }
 
     public override void Exit(PetRobotEkko owner)

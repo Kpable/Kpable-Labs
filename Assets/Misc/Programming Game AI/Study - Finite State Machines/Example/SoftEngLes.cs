@@ -78,7 +78,7 @@ public class GoToOfficeAndWork : SingletonState<GoToOfficeAndWork, SoftEngLes>
         // If not at work go to work
         if (owner.Location != LocationType.Office)
         {
-            owner.Output("Going To Work");
+            owner.Output("Back To Work");
             owner.Location = LocationType.Office;
         }
     }
@@ -160,18 +160,18 @@ public class GoHomeAndRest : SingletonState<GoHomeAndRest, SoftEngLes>
 
         bool messageHandled = false;
 
-        //switch ((MessageType)message.MessageType)
-        //{
-        //    case MessageType.Msg_DevicesPrimed:
-        //        owner.Output("Wonderful! Thanks!");
+        switch ((MessageType)message.MessageType)
+        {
+            case MessageType.Msg_DevicesPrimed:
+                owner.Output("Wonderful! Thanks!");
 
-        //        owner.GetFSM().ChangeState(UseDevices.Instance);
-        //        messageHandled = true;
-        //        break;
-        //    default:
-        //        messageHandled = false;
-        //        break;
-        //}
+                owner.GetFSM().ChangeState(UseDevices.Instance);
+                messageHandled = true;
+                break;
+            default:
+                messageHandled = false;
+                break;
+        }
 
         return messageHandled;
     }
@@ -274,18 +274,18 @@ public class SoftEngGlobalState : SingletonState<SoftEngGlobalState, SoftEngLes>
     {
         bool messageHandled = false;
 
-        switch ((MessageType)message.MessageType)
-        {
-            case MessageType.Msg_DevicesPrimed:
-                owner.Output("Wonderful! Thanks!");
+        //switch ((MessageType)message.MessageType)
+        //{
+        //    case MessageType.Msg_DevicesPrimed:
+        //        owner.Output("Wonderful! Thanks!");
 
-                owner.GetFSM().ChangeState(UseDevices.Instance);
-                messageHandled = true;
-                break;
-            default:
-                messageHandled = false;
-                break;
-        }
+        //        owner.GetFSM().ChangeState(UseDevices.Instance);
+        //        messageHandled = true;
+        //        break;
+        //    default:
+        //        messageHandled = false;
+        //        break;
+        //}
 
         return messageHandled;
     }

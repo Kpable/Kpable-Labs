@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Kpable.Utilities;
 using Kpable.AI.FSM;
-
+using System.Linq;
 public class MessageDispatcher : Singleton<MessageDispatcher>
 {
     private SortedDictionary<float, Telegram> PriorityQ = new SortedDictionary<float, Telegram>();
@@ -54,9 +54,9 @@ public class MessageDispatcher : Singleton<MessageDispatcher>
     {
         float currentTime = Time.time;
 
-        while (PriorityQ.Count > 0 && PriorityQ[0].DispatchTime < currentTime && PriorityQ[0].DispatchTime > 0)
+        while (PriorityQ.Count > 0 && PriorityQ.First().Value.DispatchTime < currentTime && PriorityQ.First().Value.DispatchTime > 0)
         {
-            var telegram = PriorityQ[0];
+            var telegram = PriorityQ.First().Value;
 
             BaseGameEntity receiverEntity = EntityManager.Instance.GetEntityFromId(telegram.Receiver);
 
