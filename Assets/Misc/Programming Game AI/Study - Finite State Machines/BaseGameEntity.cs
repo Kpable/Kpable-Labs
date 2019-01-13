@@ -16,5 +16,6 @@ namespace Kpable.AI.FSM
 
         void SetId(int id) { this.id = id; }
 
+        public virtual bool HandleMessage(Telegram message) { return false; }
     }
 }

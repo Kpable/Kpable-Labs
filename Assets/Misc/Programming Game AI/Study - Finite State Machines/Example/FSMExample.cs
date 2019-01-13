@@ -9,7 +9,8 @@ public enum Entity { Soft_Eng, Pet_Robot }
 public enum MessageType
 {
     Msg_EkkoImHome,
-    Msg_DevicesPrimed
+    Msg_DevicesPrimed,
+    Msg_SleepRobot
 }
 
 public class FSMExample : MonoBehaviour {
@@ -54,7 +55,8 @@ public class FSMExample : MonoBehaviour {
     {
         Les.Update();
         Ekko.Update();
-        yield return new WaitForSeconds(1);
+        MessageDispatcher.Instance.DispatchDelayedMessages();
+        yield return new WaitForSeconds(0.1f);
         StartCoroutine("DayOfWork");
     }
 }

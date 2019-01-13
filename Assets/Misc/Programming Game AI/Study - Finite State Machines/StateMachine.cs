@@ -7,13 +7,10 @@ namespace Kpable.AI.FSM
     public class StateMachine<T>
     {
         private T owner;
-        private State<T> currentState;
-        private State<T> previousState;
-        private State<T> globalState;
 
-        public State<T> CurrentState { get { return currentState; } set { currentState = value; } }
-        public State<T> PreviousState { get { return previousState; } set { previousState = value; } }
-        public State<T> GlobalState { get { return globalState; } set { globalState = value; } }
+        public State<T> CurrentState { get; set; }
+        public State<T> PreviousState { get; set; }
+        public State<T> GlobalState { get; set; }
 
         public StateMachine(T owner)
         {
@@ -23,41 +20,52 @@ namespace Kpable.AI.FSM
         public void Update()
         {
             if (GlobalState != null) GlobalState.Execute(owner);
-            if(CurrentState != null) CurrentState.Execute(owner);
+            if (CurrentState != null) CurrentState.Execute(owner);
         }
 
         public void ChangeState(State<T> newState)
         {
-            previousState = currentState;
-            currentState.Exit(owner);
-            currentState = newState;
-            currentState.Enter(owner);
+            PreviousState = CurrentState;
+            CurrentState.Exit(owner);
+            CurrentState = newState;
+            CurrentState.Enter(owner);
 
         }
 
         public void RevertToPreviousState()
         {
-            ChangeState(previousState);
+            ChangeState(PreviousState);
         }
 
         public bool IsInState(State<T> state)
         {
-            return currentState == state;
+            return CurrentState == state;
         }
 
         public void SetCurrentState(State<T> state)
         {
-            currentState = state;
+            CurrentState = state;
         }
 
         public void SetPreviousState(State<T> state)
         {
-            previousState = state;
+            PreviousState = state;
         }
 
         public void SetGlobalState(State<T> state)
         {
-            globalState = state;
+            GlobalState = state;
+        }
+
+        public bool HandleMessage(Telegram message)
+        {
+            if (CurrentState != null && CurrentState.OnMessage(owner, message))
+                return true;
+
+            if (GlobalState != null && GlobalState.OnMessage(owner, message))
+                return true;
+
+            return false;
         }
 
         

@@ -9,6 +9,7 @@ namespace Kpable.AI.FSM
         public abstract void Enter(T owner);
         public abstract void Execute(T owner);
         public abstract void Exit(T owner);
+        public abstract bool OnMessage(T owner, Telegram message);
     }
 
     public abstract class SingletonState<T, T1> : State<T1> where T : new()

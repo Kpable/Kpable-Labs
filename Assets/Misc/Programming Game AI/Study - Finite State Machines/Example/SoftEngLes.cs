@@ -17,6 +17,7 @@ public class SoftEngLes : BaseGameEntity {
     public static int HoursAtATime = 3;
     public static int CaffieneNeed = 5;
     public static int TirednessThreshold = 5;
+    public static int TotalHoursToWork = 40;
 
     StateMachine<SoftEngLes> stateMachine;
     LocationType location = LocationType.Home;
@@ -35,7 +36,8 @@ public class SoftEngLes : BaseGameEntity {
     public bool NeedABreak { get { return hoursClocked >= HoursAtATime; } }
     public bool Tired { get { return tiredness > TirednessThreshold; } }
     public bool NeedCoffee { get { return caffiene >= CaffieneNeed; } }
-    public bool WorkedEnough { get { return hoursInLog >= HoursBeforeBreak; } }
+    public bool WorkedEnoughForToday { get { return hoursInLog >= HoursBeforeBreak; } }
+    public bool WorkedEnough { get { return HoursInLog >= TotalHoursToWork; } }
 
 
     public SoftEngLes(int id) : 
@@ -43,8 +45,9 @@ public class SoftEngLes : BaseGameEntity {
     {
         stateMachine = new StateMachine<SoftEngLes>(this);
 
-        stateMachine.SetCurrentState(GoHomeAndRest.Instance);
-        
+        stateMachine.CurrentState = GoHomeAndRest.Instance;
+        stateMachine.GlobalState = SoftEngGlobalState.Instance;
+
     }
 
     public StateMachine<SoftEngLes> GetFSM()
@@ -60,6 +63,11 @@ public class SoftEngLes : BaseGameEntity {
     public void Output(string text)
     {
         if(OutText != null) OutText(ID, text);
+    }
+
+    public override bool HandleMessage(Telegram message)
+    {
+        return stateMachine.HandleMessage(message);
     }
 }
 
@@ -100,6 +108,11 @@ public class GoToOfficeAndWork : SingletonState<GoToOfficeAndWork, SoftEngLes>
     {
         owner.Output("Gotta step out and take a break");
     }
+
+    public override bool OnMessage(SoftEngLes owner, Telegram message)
+    {
+        return false;
+    }
 }
 
 public class GoHomeAndRest : SingletonState<GoHomeAndRest, SoftEngLes>
@@ -110,6 +123,8 @@ public class GoHomeAndRest : SingletonState<GoHomeAndRest, SoftEngLes>
         {
             owner.Output("Gotta go home");
             owner.Location = LocationType.Home;
+
+            MessageDispatcher.Instance.DispatchMessage(owner.ID, (int)Entity.Pet_Robot, (int)MessageType.Msg_EkkoImHome);
         }
     }
 
@@ -130,6 +145,35 @@ public class GoHomeAndRest : SingletonState<GoHomeAndRest, SoftEngLes>
     public override void Exit(SoftEngLes owner)
     {
         owner.Output("Leaving Home");
+    }
+
+    public override bool OnMessage(SoftEngLes owner, Telegram message)
+    {
+
+        // Theres a chance this only triggers when the agent is sleeping here. If its not, message will be missed.
+        // This adds an odd connection between the delay the other agent(petrobotekko) uses for its self message 
+        // and the duration this agent (softengles) is sleeping for. 
+        // If the message does not get handled here in this case, it could be handled in the global state as defined 
+        // in the state machine class.
+
+        // Debug proved the above to be true
+
+        bool messageHandled = false;
+
+        //switch ((MessageType)message.MessageType)
+        //{
+        //    case MessageType.Msg_DevicesPrimed:
+        //        owner.Output("Wonderful! Thanks!");
+
+        //        owner.GetFSM().ChangeState(UseDevices.Instance);
+        //        messageHandled = true;
+        //        break;
+        //    default:
+        //        messageHandled = false;
+        //        break;
+        //}
+
+        return messageHandled;
     }
 }
 
@@ -159,6 +203,11 @@ public class GetCoffee : SingletonState<GetCoffee, SoftEngLes>
     {
         owner.Output("Heading out of Wegs");
     }
+
+    public override bool OnMessage(SoftEngLes owner, Telegram message)
+    {
+        return false;
+    }
 }
 
 public class LogHours : SingletonState<LogHours, SoftEngLes>
@@ -180,6 +229,12 @@ public class LogHours : SingletonState<LogHours, SoftEngLes>
 
         if(owner.WorkedEnough)
         {
+            owner.Output("A week's work, time for the weekend!");
+            owner.GetFSM().ChangeState(Weekend.Instance);
+
+        }
+        else if(owner.WorkedEnoughForToday)
+        {
             owner.Output("A good day's work, time to head home");
             owner.GetFSM().ChangeState(GoHomeAndRest.Instance);
         }
@@ -193,6 +248,94 @@ public class LogHours : SingletonState<LogHours, SoftEngLes>
     {
         owner.Output("Alright, enough logging");
     }
+
+    public override bool OnMessage(SoftEngLes owner, Telegram message)
+    {
+        return false;
+    }
 }
 
 
+public class SoftEngGlobalState : SingletonState<SoftEngGlobalState, SoftEngLes>
+{
+    public override void Enter(SoftEngLes owner)
+    {
+    }
+
+    public override void Execute(SoftEngLes owner)
+    {
+    }
+
+    public override void Exit(SoftEngLes owner)
+    {
+    }
+
+    public override bool OnMessage(SoftEngLes owner, Telegram message)
+    {
+        bool messageHandled = false;
+
+        switch ((MessageType)message.MessageType)
+        {
+            case MessageType.Msg_DevicesPrimed:
+                owner.Output("Wonderful! Thanks!");
+
+                owner.GetFSM().ChangeState(UseDevices.Instance);
+                messageHandled = true;
+                break;
+            default:
+                messageHandled = false;
+                break;
+        }
+
+        return messageHandled;
+    }
+}
+
+public class UseDevices : SingletonState<UseDevices, SoftEngLes>
+{
+    public override void Enter(SoftEngLes owner)
+    {
+        owner.Output("Now which device shall i mess around with today?");
+    }
+
+    public override void Execute(SoftEngLes owner)
+    {
+        owner.Output("When in doubt, yes! I shall use them all!");
+        owner.GetFSM().RevertToPreviousState();
+    }
+
+    public override void Exit(SoftEngLes owner)
+    {
+        owner.Output("Oh right i have other things to do.");
+
+    }
+
+    public override bool OnMessage(SoftEngLes owner, Telegram message)
+    {
+        return false;
+    }
+}
+
+public class Weekend : SingletonState<Weekend, SoftEngLes>
+{
+    public override void Enter(SoftEngLes owner)
+    {
+        owner.Output("It's the weekend now Ekko, time to sleep buddy");
+
+        MessageDispatcher.Instance.DispatchMessage(owner.ID, (int)Entity.Pet_Robot, (int)MessageType.Msg_SleepRobot);
+    }
+
+    public override void Execute(SoftEngLes owner)
+    {
+
+    }
+
+    public override void Exit(SoftEngLes owner)
+    {
+    }
+
+    public override bool OnMessage(SoftEngLes owner, Telegram message)
+    {
+        return false;
+    }
+}

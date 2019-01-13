@@ -8,7 +8,7 @@ namespace Kpable.AI.FSM
 {
     public class EntityManager : Singleton<EntityManager>
     {
-        private Dictionary<int, BaseGameEntity> entities;
+        private Dictionary<int, BaseGameEntity> entities = new Dictionary<int, BaseGameEntity>();
 
         public void RegisterEntity(BaseGameEntity entity)
         {
