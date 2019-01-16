@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using Kpable.AI;
 using Kpable.AI.FSM;
+
 
 public class PetRobotEkko : BaseGameEntity
 {
