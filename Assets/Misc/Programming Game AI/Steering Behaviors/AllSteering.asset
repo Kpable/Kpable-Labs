@@ -11,5 +11,38 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: AllSteering
   m_EditorClassIdentifier: Assembly-CSharp::SteeringObject
+  summonMethod: 1
+  SeekOn: 0
+  seekWeight: 1
+  ArriveOn: 1
   arrivalSlowRadius: 10
   arrivalStopRadius: 0.001
+  arriveWeight: 1
+  FleeOn: 0
+  fleeRadius: 5
+  fleeWeight: 1
+  EvadeOn: 0
+  evadeThreatRange: 10
+  evadeWeight: 1
+  PursuitOn: 0
+  pursuitWeight: 1
+  WanderOn: 0
+  wanderTarget: {x: 0, y: 0, z: 0}
+  wanderRadius: 5
+  wanderDistance: 8
+  wanderJitter: 2
+  wanderRand: {x: 0, y: 0, z: 0}
+  wanderWeight: 1
+  ObstacleAvoidanceOn: 0
+  obstacleAvoidanceDetectionBoxLength: 10
+  brakingWeight: 0.2
+  obstacleAvoidanceWeight: 1
+  WallAvoidanceOn: 0
+  wallAvoidanceDetectionRayLength: 10
+  wallAvoidanceWeight: 1
+  SeperationOn: 0
+  seperationWeight: 1
+  AlignmentOn: 0
+  alignmentWeight: 1
+  CohesionOn: 0
+  cohesionWeight: 1
