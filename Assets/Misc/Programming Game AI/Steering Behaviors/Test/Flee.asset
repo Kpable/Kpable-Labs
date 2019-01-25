@@ -9,16 +9,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ff4c4def9b66da44db11f34540cfa39e, type: 3}
-  m_Name: Seek
+  m_Name: Flee
   m_EditorClassIdentifier: 
   summonMethod: 1
-  SeekOn: 1
+  SeekOn: 0
   seekWeight: 1
   ArriveOn: 0
   arrivalSlowRadius: 10
   arrivalStopRadius: 0.001
   arriveWeight: 1
-  FleeOn: 0
+  FleeOn: 1
   fleeRadius: 5
   fleeWeight: 1
   EvadeOn: 0

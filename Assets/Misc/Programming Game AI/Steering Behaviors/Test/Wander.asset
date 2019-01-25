@@ -8,13 +8,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: AllSteering
-  m_EditorClassIdentifier: Assembly-CSharp::SteeringObject
+  m_Script: {fileID: 11500000, guid: ff4c4def9b66da44db11f34540cfa39e, type: 3}
+  m_Name: Wander
+  m_EditorClassIdentifier: 
   summonMethod: 1
   SeekOn: 0
   seekWeight: 1
-  ArriveOn: 1
+  ArriveOn: 0
   arrivalSlowRadius: 10
   arrivalStopRadius: 0.001
   arriveWeight: 1
@@ -26,12 +26,12 @@ MonoBehaviour:
   evadeWeight: 1
   PursuitOn: 0
   pursuitWeight: 1
-  WanderOn: 0
-  wanderTarget: {x: 0, y: 0, z: 0}
-  wanderRadius: 5
-  wanderDistance: 8
-  wanderJitter: 2
-  wanderRand: {x: 0, y: 0, z: 0}
+  WanderOn: 1
+  wanderTarget: {x: -1.9748061, y: 0.14332053, z: 0}
+  wanderRadius: 1.98
+  wanderDistance: 12.89
+  wanderJitter: 3.94
+  wanderRand: {x: -1.9748061, y: 0.14332053, z: 0}
   wanderWeight: 1
   ObstacleAvoidanceOn: 0
   obstacleAvoidanceDetectionBoxLength: 10
